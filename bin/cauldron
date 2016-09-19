@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+
+var yargs = require("yargs");
+yargs.usage("<cmd> [args]").command('build', 'Build grimoirejs related project.', {
+        port: {
+            alias: "p",
+            default: 8080,
+            describe: "Port number used when '-s' was specified."
+        },
+        watch: {
+            alias: "w",
+            default: false,
+            describe: "Should watch changes of source files and need build."
+        },
+        babel: {
+            alias: "b",
+            default: false,
+            describe: "Needs babel generated es2016 files into es2015 file."
+        },
+        minify: {
+            alias: "m",
+            default: false,
+            describe: "Needs minify generated file.(Only works when '--babel' was specified.)"
+        },
+        server: {
+            alias: "s",
+            default: false,
+            describe: "Execute server with the task. This option would be used with watch task basically."
+        },
+        noIndexReplace: {
+            default: false,
+            describe: "Not executing replace the meta comments of main typescript file."
+        }
+    }, function(argv) {
+        require("../lib/build/build");
+    })
+    .command('server', "Start server for the project", {
+        port: {
+            alias: "p",
+            default: 8080,
+            describe: "The port number that would be used."
+        }
+    }, function(argv) {
+        require("../lib/server/server").default();
+    }).command('scaffold', "Scaffold grimoirejs files", {
+        name: {
+            alias: "n",
+            describe: "The name of the file which you want generate"
+        },
+        type: {
+            alias: "t",
+            describe: "The type of the file you want to generate"
+        },
+        force: {
+            describe: "Force override scaffolded file even if destination file was already existing."
+        }
+    }, function() {
+        require("../lib/scaffold/scaffold");
+    })
+    .help().argv;

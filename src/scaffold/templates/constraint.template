@@ -1,0 +1,8 @@
+import GomlNode from "grimoirejs/lib/Node/GomlNode";
+
+function {{name}}Constraint(arg1: any, arg2: any/*replace args*/): ((self: GomlNode) => string) {
+  return (self: GomlNode) => {
+    return "ErrorMessage or null"; // return null if constraint satisfy.else return errorMessage.
+  };
+}
+export default {{name}}Constraint;
