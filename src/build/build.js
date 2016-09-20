@@ -35,6 +35,9 @@ if (argv.babel) {
 if (argv.minify) {
     taskCount++;
 }
+if (argv.noBundle) {
+    taskCount = 2;
+}
 
 const tickBar = (bar, message) => {
     bar.fmt = `:percent[:bar](${message})\n`;
@@ -52,7 +55,7 @@ let singleBuild = async(config) => {
             total: barLength
         });
         tickBar(bar, "Generating code from template...");
-        await txt2js(config,config.ts.src,config.ts.lib, false, false);
+        await txt2js(config, config.ts.src, config.ts.lib, false, false);
         await prebuild(config);
         if (!argv.noIndexReplace) {
             await transformIndex(config);
@@ -62,6 +65,9 @@ let singleBuild = async(config) => {
         if (tsResult.stdout) {
             console.log(chalk.red(tsResult.stdout));
             return;
+        }
+        if(argv.noBundle){
+          return;
         }
         tickBar(bar, "Bundling es2016 javascript files...");
         let bundled = await bundle(config);

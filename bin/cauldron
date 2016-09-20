@@ -30,6 +30,10 @@ yargs.usage("<cmd> [args]").command('build', 'Build grimoirejs related project.'
         noIndexReplace: {
             default: false,
             describe: "Not executing replace the meta comments of main typescript file."
+        },
+        noBundle:{
+            default:false,
+            describe:"Not executing bundling task"
         }
     }, function(argv) {
         require("../lib/build/build");
