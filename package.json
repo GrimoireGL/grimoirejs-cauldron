@@ -1,6 +1,6 @@
 {
   "name": "grimoirejs-cauldron",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "The build environment for grimoirejs.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,6 +21,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "ava": "^0.16.0",
     "babel-cli": "^6.14.0",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-stage-2": "^6.13.0",
@@ -51,7 +52,10 @@
       "src": "./src-debug"
     },
     "main": "test.ts",
-    "test": "./test",
+    "test": {
+      "src":"./test",
+      "temp":"./lib-test"
+    },
     "out": {
       "es6": "./product/grimoire.es2016.js",
       "es5": "./product/grimoire.js"

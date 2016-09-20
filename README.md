@@ -44,6 +44,10 @@ You needs to put something like below into root element of the package.json.
     "src": "./src"
   },
   "main": "index.ts",
+  "test":{
+    "src":"./test",
+    "temp":"./lib-test"
+  }
   "out": {
     "es6": "./product/grimoire.es2016.js",
     "es5": "./product/grimoire.js"
