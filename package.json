@@ -10,6 +10,10 @@
     "keywords": [
         "grimoire"
     ],
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/GrimoireGL/grimoirejs-cauldron"
+    },
     "files": ["bin", "lib", "src"],
     "author": "",
     "license": "MIT",
@@ -38,7 +42,7 @@
     "grimoire": {
         "ts": {
             "lib": "./lib-es6",
-            "copyTo": "./lib-ts",
+            "temp": "./lib-ts",
             "src": "./src-debug"
         },
         "main": "test.ts",
@@ -51,10 +55,10 @@
             ".txt"
         ],
         "doc": {
-          "src":"./doc",
-          "header":"./doc/header.md",
-          "footer":"./doc/footer.md",
-          "dest":"./lib-md/index.md"
+            "src": "./doc",
+            "header": "./doc/header.md",
+            "footer": "./doc/footer.md",
+            "dest": "./lib-md/index.md"
         }
     }
 }

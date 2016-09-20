@@ -19,7 +19,7 @@ function getRelativePath(filePath) {
 
 
 async function transform(config) {
-    const indexPath = path.join(config.ts.copyTo, config.main);
+    const indexPath = path.join(config.ts.temp, config.main);
     let index = await readFileAsync(indexPath);
     // glob component files
     const componentFiles = await globAsync(config.ts.src + '/**/*Component.ts');
