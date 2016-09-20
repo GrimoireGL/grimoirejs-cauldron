@@ -1,0 +1,11 @@
+### 属性
+<!-- DO NOT EDIT -->
+<!-- ATTRS -->
+| 属性名 | コンバーター | デフォルト値 | その他 |
+|:------:|:------:|:------:|:------:|
+{{#each attributes}}
+| {{name}} | {{converter}} | {{defaultValue}} | {{other}} |
+{{/each}}
+
+<!-- /ATTRS -->
+<!-- /DO NOT EDIT -->

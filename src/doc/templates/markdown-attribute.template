@@ -1,0 +1,8 @@
+{{#each attributes}}
+### {{name}} 属性
+
+ * `converter`: {{converter}}
+ * `defaultValue`: {{defaultValue}}
+
+<!-- EDIT HERE({{name}})-->{{description}}<!-- /EDIT HERE-->
+{{/each}}

@@ -132,6 +132,18 @@ export function ensureDirAsync(path) {
     });
 }
 
+export function ensureFileAsync(path) {
+    return new Promise((resolve, reject) => {
+        fse.ensureFile(path, (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
 export function existsAsync(path) {
     return new Promise((resolve, reject) => {
         fs.stat(path, (err, stat) => {

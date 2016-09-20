@@ -57,4 +57,9 @@ yargs.usage("<cmd> [args]").command('build', 'Build grimoirejs related project.'
     }, function() {
         require("../lib/scaffold/scaffold");
     })
+    .command("doc", "Scaffold document files", {
+
+    }, function() {
+        require("../lib/doc/doc").default();
+    })
     .help().argv;
