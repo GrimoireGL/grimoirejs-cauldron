@@ -52,7 +52,7 @@ let singleBuild = async(config) => {
             total: barLength
         });
         tickBar(bar, "Generating code from template...");
-        await txt2js(config, false, false);
+        await txt2js(config,config.ts.src,config.ts.lib, false, false);
         await prebuild(config);
         if (!argv.noIndexReplace) {
             await transformIndex(config);

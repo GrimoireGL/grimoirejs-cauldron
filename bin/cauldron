@@ -62,4 +62,22 @@ yargs.usage("<cmd> [args]").command('build', 'Build grimoirejs related project.'
     }, function() {
         require("../lib/doc/doc").default();
     })
+    .command("txt2js","Text files convert into js.",{
+      src:{
+        alias:"s",
+        describe:"The folder of sources"
+      },
+      dest:{
+        alias:"d",
+        describe:"The folder to generate codes"
+      },
+      noDts:{
+        describe:"Whether d.ts files should generated in source folder"
+      },
+      isCjs:{
+        describe:"js file should generated in common js format or not"
+      }
+    },function(argv){
+      require("../lib/build/txt2js").execTxt2Js(argv.s,argv.d,argv.isCjs,argv.noDts);
+    })
     .help().argv;
