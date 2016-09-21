@@ -19,6 +19,7 @@ import txt2js from "./txt2js";
 import minify from "./minify";
 import server from "../server/server";
 import transformIndex from "./transform-index";
+import babelSeparated from "./babelSeparated";
 
 const parseConfig = async() => {
     const config = JSON.parse(await readFileAsync("./package.json"));
@@ -37,6 +38,9 @@ if (argv.minify) {
 }
 if (argv.noBundle) {
     taskCount = 2;
+}
+if (argv.babelSeparated) {
+    taskCount++;
 }
 
 const tickBar = (bar, message) => {
@@ -66,8 +70,12 @@ let singleBuild = async(config) => {
             console.log(chalk.red(tsResult.stdout));
             return;
         }
-        if(argv.noBundle){
-          return;
+        if (argv.babelSeparated) {
+          tickBar(bar, "Generating es5 javascript files...");
+          await babelSeparated(config);
+        }
+        if (argv.noBundle) {
+            return;
         }
         tickBar(bar, "Bundling es2016 javascript files...");
         let bundled = await bundle(config);

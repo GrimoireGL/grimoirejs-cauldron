@@ -101,5 +101,6 @@ $RECYCLE.BIN/
 
 product
 lib-es6
+lib-es5
 lib-ts
 lib
