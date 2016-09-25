@@ -1,5 +1,5 @@
 {{#each externals}}
-  import {{path}};
+  import "{{this}}";
 {{/each}}
 {{#each components}}
   import {{key}} from "{{path}}";

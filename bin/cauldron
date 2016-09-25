@@ -37,14 +37,14 @@ yargs.usage("<cmd> [args]").command('build', 'Build grimoirejs related project.'
         },
         babelSeparated: {
             default: false,
-            describe:"Generate es5 files for each es6 files"
+            describe: "Generate es5 files for each es6 files"
         }
     }, function(argv) {
-      try{
-        require("../lib/build/build");
-      }catch(e){
-        console.log(e);
-      }
+        try {
+            require("../lib/build/build");
+        } catch (e) {
+            console.log(e);
+        }
     })
     .command('server', "Start server for the project", {
         port: {
@@ -91,5 +91,22 @@ yargs.usage("<cmd> [args]").command('build', 'Build grimoirejs related project.'
         }
     }, function(argv) {
         require("../lib/build/txt2js").execTxt2Js(argv.s, argv.d, argv.isCjs, argv.noDts);
-    })
+    }).command("wire", "Inject dependency(Internal use)", {
+            name: {
+                alias: "n",
+                describe: "The package name to be used"
+            }
+        },
+        function(argv) {
+            require("../lib/wire/wire").wire();
+        })
+    .command("unwire", "Remove dependency(Internal use)", {
+            name: {
+                alias: "n",
+                describe: "The package name to be removed"
+            }
+        },
+        function(argv) {
+            require("../lib/wire/wire").unwire();
+        })
     .help().argv;
