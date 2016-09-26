@@ -51,8 +51,6 @@ async function parseDependencies() {
     for (let d of parseDependency(txt)) {
         dep.push(d);
     }
-    console.log(txt);
-    console.log(dep);
     return dep;
 }
 
