@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import handleBars from 'handlebars';
 import fse from 'fs-extra';
 import {
@@ -94,6 +95,42 @@ export function* watchItr(src, options) {
         });
         yield p;
     }
+}
+
+export async function getEntities(path){
+  return new Promise((resolve,reject)=>{
+    fs.readdir(path,(err,files)=>{
+      if(err){
+        reject(err);
+      }else{
+        resolve(files);
+      }
+    });
+  });
+}
+
+export async function isDirectory(path){
+  return new Promise((resolve,reject)=>{
+    fs.stat(path,(err,stat)=>{
+      if(err){
+        reject(err);
+      }else{
+        resolve(stat.isDirectory());
+      }
+    });
+  });
+}
+
+export async function getDirectories(srcPath){
+  const files = await getEntities(srcPath);
+  const directories = [];
+  for(let i = 0; i < files.length; i++){
+    const dirName = path.join(srcPath,files[i]);
+    if(await isDirectory(dirName)){
+      directories.push(files[i]);
+    }
+  }
+  return directories;
 }
 
 export function emptyDirAsync(src) {

@@ -3,7 +3,8 @@ import {
     writeFileAsync,
     templateAsync,
     globAsync,
-    ensureFileAsync
+    ensureFileAsync,
+    getDirectories
 } from "../async-helper";
 import path from "path";
 const templateDir = path.join(__dirname, "../../src/build/templates/");
@@ -16,6 +17,26 @@ function getRelativePath(filePath) {
     const abs = path.resolve(filePath);
     const regex = /(.+)\.[^\.]+$/m;
     return "./" + path.relative(path.resolve('./src/'), abs).replace(regex, "$1");
+}
+
+async function isNeedBundling(src){
+  const pConfig = JSON.parse(await readFileAsync(`./node_modules/${src}/package.json`));
+  if(pConfig.grimoire && pConfig.grimoire.isPlugin){
+    return true;
+  }
+  return false;
+}
+
+async function getBundleTargets(){
+  const directories = await getDirectories("./node_modules");
+  const candidates = directories.filter(d=>d.match(/grimoirejs[a-zA-Z0-9_\-@]*$/));
+  const bundleTargets = [];
+  for(let i = 0; i < candidates.length; i++){
+    if(await isNeedBundling(candidates[i])){
+      bundleTargets.push(candidates[i]);
+    }
+  }
+  return bundleTargets;
 }
 
 const parseDependency = function*(text) {
@@ -87,7 +108,7 @@ async function transform(config) {
         };
     });
     const imports = await templateAsync(templateDir + "imports.template", {
-        externals: await parseDependencies(),
+        externals: await getBundleTargets(),
         components: components,
         converters: converters
     });
@@ -98,6 +119,7 @@ async function transform(config) {
     });
     index = index.replace(/^\s*\/\/\<\%\=IMPORTS\%\>\s*$/m, imports);
     index = index.replace(/^\s*\/\/\<\%\=REGISTER\%\>\s*$/m, register);
+    console.log();
     await writeFileAsync(indexPath, index);
 }
 
