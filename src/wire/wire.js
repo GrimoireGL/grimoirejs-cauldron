@@ -7,7 +7,7 @@ import {
     argv
 } from "yargs";
 export async function wire(){
-    const pConfig = await readFileAsync("package.json");
+    const pConfig = JSON.parse(await readFileAsync("package.json"));
     if (pConfig.name === argv.name) {
         return; // No needs to inject because this package is itself.
     } else {
@@ -22,7 +22,7 @@ export async function wire(){
 };
 
 export async function unwire(){
-    const pConfig = await readFileAsync("package.json");
+    const pConfig = JSON.parse(await readFileAsync("package.json"));
     if (pConfig.name === argv.name) {
         return; // No needs to inject because this package is itself.
     } else {
