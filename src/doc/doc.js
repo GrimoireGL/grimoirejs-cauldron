@@ -205,8 +205,6 @@ const main = async() => {
     } catch (e) {
         console.log(e);
     }
-    console.log("here3");
-
 };
 
 export default main;
