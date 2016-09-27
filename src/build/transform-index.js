@@ -113,13 +113,12 @@ async function transform(config) {
         converters: converters
     });
     const register = await templateAsync(templateDir + "register.template", {
-        namespace: config.namespace ? config.namespace : "HTTP://GRIMOIRE.GL/NS/CUSTOM",
+        namespace: config.namespace ? config.namespace : "HTTP://GRIMOIRE.GL/NS/DEFAULT",
         components: components,
         converters: converters
     });
     index = index.replace(/^\s*\/\/\<\%\=IMPORTS\%\>\s*$/m, imports);
     index = index.replace(/^\s*\/\/\<\%\=REGISTER\%\>\s*$/m, register);
-    console.log();
     await writeFileAsync(indexPath, index);
 }
 
