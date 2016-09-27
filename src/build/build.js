@@ -67,12 +67,16 @@ let singleBuild = async(config) => {
         tickBar(bar, "Compiling typescript files...");
         const tsResult = await compile(config);
         if (tsResult.stdout) {
+            console.log(chalk.bgRed.white("COMPILE ERROR!"));
             console.log(chalk.red(tsResult.stdout));
+            if (!argv.watch) {
+                process.exit(1);
+            }
             return;
         }
         if (argv.babelSeparated) {
-          tickBar(bar, "Generating es5 javascript files...");
-          await babelSeparated(config);
+            tickBar(bar, "Generating es5 javascript files...");
+            await babelSeparated(config);
         }
         if (argv.noBundle) {
             return;
@@ -86,7 +90,15 @@ let singleBuild = async(config) => {
         });
         if (argv.babel) {
             tickBar(bar, "Transpiling into es2015 javascript files...");
-            await babel(config);
+            try {
+                const result = await babel(config);
+            } catch (e) {
+                console.log(chalk.red(e.stdout));
+                console.log(chalk.red(e.stderr));
+                if (!argv.watch) {
+                    process.exit(1);
+                }
+            }
         }
         if (argv.minify && argv.babel) {
             tickBar(bar, "Uglifying generated javascript");

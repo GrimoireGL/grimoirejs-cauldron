@@ -8,6 +8,7 @@ import inject from 'rollup-plugin-inject';
 import commonjs from "rollup-plugin-commonjs";
 import npm from "rollup-plugin-node-resolve";
 import chalk from "chalk";
+import {argv} from "yargs";
 
 const bundleTask = function(config) {
     const mainFile = path.join(config.ts.lib, config.main).trim().replace(/\.ts$/, ".js");
@@ -50,6 +51,9 @@ const defaultFunc = async(config) => {
         console.error(chalk.white.bgRed("BUNDLING FAILED"));
         console.error(chalk.red(e));
         console.error(chalk.yellow(e.stack));
+        if(!argv.watch){
+          process.exit(1);
+        }
     }
     return bundled;
 };
