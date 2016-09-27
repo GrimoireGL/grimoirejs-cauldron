@@ -178,7 +178,7 @@ const generateIndex = async(config) => {
     await ensureFileAsync(config.doc.footer);
     const header = await readFileAsync(config.doc.header);
     const footer = await readFileAsync(config.doc.footer);
-    const files = await globAsync(config.doc.src + "/**/*.md");
+    const files = await globAsync(config.doc.src + "/*/**/*.md");
     const content = [];
     for (let i = 0; i < files.length; i++) {
         content.push(await readFileAsync(files[i]));
@@ -205,6 +205,7 @@ const main = async() => {
     } catch (e) {
         console.log(e);
     }
+
 };
 
 export default main;
