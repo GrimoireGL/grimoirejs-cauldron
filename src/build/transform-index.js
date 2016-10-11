@@ -7,6 +7,7 @@ import {
     getDirectories
 } from "../async-helper";
 import path from "path";
+import {argv} from "yargs";
 const templateDir = path.join(__dirname, "../../src/build/templates/");
 
 function getFileNameBody(filePath) {
@@ -117,6 +118,8 @@ async function transform(config) {
         components: components,
         converters: converters
     });
+    let polifillPath = "grimoirejs-cauldron/polyfill/" + (argv.babel ? "es5" : "es6");
+    index = `import "${polifillPath}";\n` + index;
     index = index.replace(/^\s*\/\/\<\%\=IMPORTS\%\>\s*$/m, imports);
     index = index.replace(/^\s*\/\/\<\%\=REGISTER\%\>\s*$/m, register);
     await writeFileAsync(indexPath, index);

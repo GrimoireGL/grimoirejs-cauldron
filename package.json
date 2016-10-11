@@ -1,6 +1,6 @@
 {
   "name": "grimoirejs-cauldron",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "The build environment for grimoirejs.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -16,8 +16,10 @@
   "files": [
     "bin",
     "lib",
-    "src"
+    "src",
+    "polyfill"
   ],
+  "main":"polyfill/index.js",
   "author": "",
   "license": "MIT",
   "dependencies": {

@@ -4,7 +4,6 @@ import {
 import path from "path";
 import sourcemaps from "rollup-plugin-sourcemaps";
 import builtin from "rollup-plugin-node-builtins";
-import inject from 'rollup-plugin-inject';
 import commonjs from "rollup-plugin-commonjs";
 import npm from "rollup-plugin-node-resolve";
 import chalk from "chalk";
@@ -18,11 +17,6 @@ const bundleTask = function(config) {
             sourceMap: true,
             plugins: [
                 sourcemaps(),
-                inject({
-                    modules: {
-                        __awaiter: 'typescript-awaiter'
-                    }
-                }),
                 builtin(),
                 commonjs({
                     ignoreGlobal: true,
