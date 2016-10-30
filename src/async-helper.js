@@ -7,6 +7,12 @@ import {
 } from 'child_process';
 import watch from 'watch';
 import glob from 'glob';
+import {
+    argv
+} from 'yargs';
+import chalk from 'chalk';
+
+var isDebug = !!argv.debug;
 
 export function readFileAsync(filePath) {
     return new Promise((resolve, reject) => {
@@ -73,6 +79,10 @@ export function unlinkAsync(filePath) {
 }
 
 export function execAsync(command) {
+    if (isDebug) {
+        console.log(chalk.green(`Executing:${command}`));
+        console.log(chalk.cyan(`PATH:${process.env.PATH}`));
+    }
     return new Promise((resolve, reject) => {
         exec(command, (err, stdout, stderr) => {
             resolve({
@@ -97,40 +107,40 @@ export function* watchItr(src, options) {
     }
 }
 
-export async function getEntities(path){
-  return new Promise((resolve,reject)=>{
-    fs.readdir(path,(err,files)=>{
-      if(err){
-        reject(err);
-      }else{
-        resolve(files);
-      }
+export async function getEntities(path) {
+    return new Promise((resolve, reject) => {
+        fs.readdir(path, (err, files) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(files);
+            }
+        });
     });
-  });
 }
 
-export async function isDirectory(path){
-  return new Promise((resolve,reject)=>{
-    fs.stat(path,(err,stat)=>{
-      if(err){
-        reject(err);
-      }else{
-        resolve(stat.isDirectory());
-      }
+export async function isDirectory(path) {
+    return new Promise((resolve, reject) => {
+        fs.stat(path, (err, stat) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(stat.isDirectory());
+            }
+        });
     });
-  });
 }
 
-export async function getDirectories(srcPath){
-  const files = await getEntities(srcPath);
-  const directories = [];
-  for(let i = 0; i < files.length; i++){
-    const dirName = path.join(srcPath,files[i]);
-    if(await isDirectory(dirName)){
-      directories.push(files[i]);
+export async function getDirectories(srcPath) {
+    const files = await getEntities(srcPath);
+    const directories = [];
+    for (let i = 0; i < files.length; i++) {
+        const dirName = path.join(srcPath, files[i]);
+        if (await isDirectory(dirName)) {
+            directories.push(files[i]);
+        }
     }
-  }
-  return directories;
+    return directories;
 }
 
 export function emptyDirAsync(src) {

@@ -20,6 +20,7 @@ import minify from "./minify";
 import server from "../server/server";
 import transformIndex from "./transform-index";
 import babelSeparated from "./babelSeparated";
+import rebundle from "./rebundle";
 
 const parseConfig = async() => {
     const config = JSON.parse(await readFileAsync("./package.json"));
@@ -31,7 +32,7 @@ const barLength = 50;
 
 let taskCount = 4;
 if (argv.babel) {
-    taskCount++;
+    taskCount += 2;
 }
 if (argv.minify) {
     taskCount++;
@@ -66,6 +67,10 @@ let singleBuild = async(config) => {
         }
         tickBar(bar, "Compiling typescript files...");
         const tsResult = await compile(config);
+        if(tsResult.stderr){
+          console.log(chalk.red(tsResult.stderr));
+          process.exit(1);
+        }
         if (tsResult.stdout) {
             console.log(chalk.bgRed.white("COMPILE ERROR!"));
             console.log(chalk.red(tsResult.stdout));
@@ -92,6 +97,10 @@ let singleBuild = async(config) => {
             tickBar(bar, "Transpiling into es2015 javascript files...");
             try {
                 const result = await babel(config);
+                if (result.stderr) {
+                  console.log(chalk.red(result.stderr));
+                  process.exit(1);
+                }
             } catch (e) {
                 console.log(chalk.red(e.stdout));
                 console.log(chalk.red(e.stderr));
@@ -99,6 +108,8 @@ let singleBuild = async(config) => {
                     process.exit(1);
                 }
             }
+            tickBar(bar, "Rebundling...");
+            await rebundle(config);
         }
         if (argv.minify && argv.babel) {
             tickBar(bar, "Uglifying generated javascript");
