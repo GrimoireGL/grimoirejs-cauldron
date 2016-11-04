@@ -48,7 +48,7 @@ const scaffold = async() => {
             name: argv.name
         });
         await writeScaffoled(config.ts.src + "/Converters/" + argv.name + "Converter.ts", templated);
-        const test = await templateAsync("./scripts/templates/converter_test.template", {
+        const test = await templateAsync(templateDir + "converter_test.template", {
             key: argv.name + "Converter",
             path: argv.name + "Converter"
         });
