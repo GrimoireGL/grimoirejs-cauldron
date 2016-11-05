@@ -97,7 +97,30 @@ export function execAsync(command) {
 export function* watchItr(src, options) {
     let resolver = {};
     watch.watchTree(src, options, (f, curr, prev) => {
-        resolver.resolve(f);
+        let result = {};
+        if (typeof f === "object" && prev == null && curr == null) {
+            result = {
+                state: "TREE_WALKED",
+                hash: f
+            };
+        } else if (prev === null) {
+            result = {
+                state: "CREATED",
+                stat: curr
+            };
+        } else if (curr.nlink === 0) {
+            result = {
+                state: "REMOVED",
+                prevStat: prev
+            };
+        } else {
+          result = {
+            state:"MODIFIED",
+            prevStat:prev,
+            currStat:curr
+          };
+        }
+        resolver.resolve(result);
     });
     while (true) {
         const p = new Promise((resolve, reject) => {

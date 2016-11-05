@@ -67,9 +67,9 @@ let singleBuild = async(config) => {
         }
         tickBar(bar, "Compiling typescript files...");
         const tsResult = await compile(config);
-        if(tsResult.stderr){
-          console.log(chalk.red(tsResult.stderr));
-          process.exit(1);
+        if (tsResult.stderr) {
+            console.log(chalk.red(tsResult.stderr));
+            process.exit(1);
         }
         if (tsResult.stdout) {
             console.log(chalk.bgRed.white("COMPILE ERROR!"));
@@ -98,8 +98,8 @@ let singleBuild = async(config) => {
             try {
                 const result = await babel(config);
                 if (result.stderr) {
-                  console.log(chalk.red(result.stderr));
-                  process.exit(1);
+                    console.log(chalk.red(result.stderr));
+                    process.exit(1);
                 }
             } catch (e) {
                 console.log(chalk.red(e.stdout));
@@ -128,10 +128,13 @@ const build = async() => {
     else {
         console.log(chalk.white.bgGreen("WATCH MODE ENABLED"));
         for (let changedChunk of watchItr(config.ts.src, {
-                interval: 500
+                interval: 1
             })) {
-            await changedChunk;
-            console.log(chalk.black.bgWhite("Change was detected. Building was started."))
+            const changeDesc = await changedChunk;
+            if (argv.debug) {
+              console.log(chalk.cyan(JSON.stringify(changeDesc)));
+            }
+            console.log(chalk.black.bgWhite("Rebuilding stat..."))
             await singleBuild(config);
         }
     }
