@@ -92,4 +92,21 @@ yargs.usage("<cmd> [args]").command('build', 'Build grimoirejs related project.'
     }, function(argv) {
         require("../lib/build/txt2js").execTxt2Js(argv.s, argv.d, argv.isCjs, argv.noDts);
     })
+    .command("generate-index", {
+            src: {
+                alias: "s",
+                describe: "The folder containing ES6 codes to generate indices"
+            },
+            destJs: {
+                alias: "j",
+                describe: "The file name to be generated as js code"
+            },
+            destDts: {
+                alias: "d",
+                describe: "The file name to be generated as definetly typed"
+            }
+        },
+        function(argv) {
+            require("../lib/generate-index");
+        })
     .help().argv;

@@ -11,8 +11,29 @@ import {
     argv
 } from 'yargs';
 import chalk from 'chalk';
-
+import prompt from "prompt";
 var isDebug = !!argv.debug;
+prompt.start();
+
+export async function checkCommandAvailableAsync(command) {
+    const whereResult = await execAsync(`which ${command}`); // TODO support windows
+    if (whereResult.stderr || whereResult.err) {
+        return false;
+    } else {
+        return true;
+    }
+}
+export function promptAsync(property) {
+    return new Promise((resolve, reject) => {
+        prompt.get(property, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
 
 export function readFileAsync(filePath) {
     return new Promise((resolve, reject) => {
@@ -114,11 +135,11 @@ export function* watchItr(src, options) {
                 prevStat: prev
             };
         } else {
-          result = {
-            state:"MODIFIED",
-            prevStat:prev,
-            currStat:curr
-          };
+            result = {
+                state: "MODIFIED",
+                prevStat: prev,
+                currStat: curr
+            };
         }
         resolver.resolve(result);
     });
