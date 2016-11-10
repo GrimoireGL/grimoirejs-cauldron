@@ -1,0 +1,5 @@
+{{#each imports}}
+  import {{key}} from "{{path}}";
+{{/each}}
+
+export default {{exportObject}};

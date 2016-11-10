@@ -107,6 +107,6 @@ yargs.usage("<cmd> [args]").command('build', 'Build grimoirejs related project.'
             }
         },
         function(argv) {
-            require("../lib/generate-index");
+            require("../lib/generate-index/generate-index");
         })
     .help().argv;
