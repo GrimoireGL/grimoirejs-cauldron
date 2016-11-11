@@ -1,14 +1,15 @@
 import {
     globAsync,
     readFileAsync,
-    templateAsync
+    templateAsync,
+    writeFileAsync
 } from "../async-helper";
 import {
     argv
 } from "yargs";
 import path from "path";
 
-function generateStructureRecursively(obj, sepDirs,basePath) {
+function generateStructureRecursively(obj, sepDirs, basePath) {
     if (sepDirs.length < 2) {
         return;
     }
@@ -21,37 +22,47 @@ function generateStructureRecursively(obj, sepDirs,basePath) {
         obj[sepDirs[0]] = {};
     }
     if (sepDirs.length > 2) {
-        generateStructureRecursively(obj[sepDirs[0]], sepDirs.slice(1),basePath);
+        generateStructureRecursively(obj[sepDirs[0]], sepDirs.slice(1), basePath);
     } else if (sepDirs.length === 2) {
         obj[sepDirs[0]][sepDirs[1]] = jsSafeString(basePath + sepDirs[1]);
     }
 }
 
-function jsSafeString(str){
-  return str.replace(/\./g,"_").replace(/\-/g,"_");
+function jsSafeString(str) {
+    return str.replace(/\./g, "_").replace(/\-/g, "_");
 }
 
 function asJSIndex(jsonStr, sepDirs) {
     for (let pathKey in sepDirs) {
-      const keyName = jsSafeString(sepDirs[pathKey].reduce((p, c) => p + c));
-      const regex = new RegExp(`"${keyName}"`);
-      jsonStr = jsonStr.replace(regex,keyName);
+        const keyName = jsSafeString(sepDirs[pathKey].reduce((p, c) => p + c));
+        const regex = new RegExp(`"${keyName}"`);
+        jsonStr = jsonStr.replace(regex, keyName);
     }
-    jsonStr = jsonStr.replace(/,/g,";");
     return jsonStr;
 }
 
 async function generateIndex() {
     try {
         const cwd = process.cwd(); // current working directory
+        const pkgJson = path.join(cwd, "package.json");
+        let main = JSON.parse(await readFileAsync(pkgJson)).main;
+        let destFile = path.resolve(path.join(cwd, argv.destJs));
+        if (!main) {
+          throw new Error("main field is not defined on package.json");
+        }
+        main = path.resolve(main);
         const baseUrl = path.join(cwd, argv.src); // absolute path of source directory
         const detectedFiles = await globAsync(path.join(cwd, argv.src, "**/*.js")); // glob all javascript files
         const pathMap = {};
         // listup files containing `export default`
         for (let i = 0; i < detectedFiles.length; i++) {
+            const relative = path.relative(baseUrl, detectedFiles[i]);
+            const absolute = path.resolve(detectedFiles[i]);
+            if (destFile === absolute || main === absolute) {
+                continue;
+            }
             const content = await readFileAsync(detectedFiles[i]);
             if (content.indexOf("export default") >= 0) { // to ignore interfaces
-                const relative = path.relative(baseUrl, detectedFiles[i]);
                 pathMap[relative] = path.parse(relative);
             }
         }
@@ -64,94 +75,25 @@ async function generateIndex() {
         // make structure of index
         const structureObject = {};
         for (let keyPath in separated) {
-            generateStructureRecursively(structureObject, separated[keyPath],"");
+            generateStructureRecursively(structureObject, separated[keyPath], "");
         }
-        // example
-        const jsonCode = JSON.stringify(structureObject);
-      //  console.log(jsonCode);
-        // sample output of the code above
-        /*
-        {
-"Asset": {
-  "AssetLoader": "AssetAssetLoader",
-  "CacheResolver": "AssetCacheResolver",
-  "defaultLoader.html": "AssetdefaultLoader.html",
-  "ExternalResourceResolver": "AssetExternalResourceResolver",
-  "ImageResolver": "AssetImageResolver",
-  "TextFileResolver": "AssetTextFileResolver"
-},
-"Camera": {
-  "PerspectiveCamera": "CameraPerspectiveCamera"
-},
-"Components": {
-  "AssetLoadingManagerComponent": "ComponentsAssetLoadingManagerComponent",
-  "CameraComponent": "ComponentsCameraComponent",
-  "CanvasInitializerComponent": "ComponentsCanvasInitializerComponent",
-  "FullscreenComponent": "ComponentsFullscreenComponent",
-  "GeometryComponent": "ComponentsGeometryComponent",
-  "GeometryRegistoryComponent": "ComponentsGeometryRegistoryComponent",
-  "HTMLBinderComponent": "ComponentsHTMLBinderComponent",
-  "LoopManagerComponent": "ComponentsLoopManagerComponent",
-  "MaterialComponent": "ComponentsMaterialComponent",
-  "MaterialContainerComponent": "ComponentsMaterialContainerComponent",
-  "MaterialImporterComponent": "ComponentsMaterialImporterComponent",
-  "MaterialManagerComponent": "ComponentsMaterialManagerComponent",
-  "MeshRendererComponent": "ComponentsMeshRendererComponent",
-  "MouseCameraControlComponent": "ComponentsMouseCameraControlComponent",
-  "RenderBufferComponent": "ComponentsRenderBufferComponent",
-  "RendererComponent": "ComponentsRendererComponent",
-  "RendererManagerComponent": "ComponentsRendererManagerComponent",
-  "RenderQuadComponent": "ComponentsRenderQuadComponent",
-  "RenderSceneComponent": "ComponentsRenderSceneComponent",
-  "SceneComponent": "ComponentsSceneComponent",
-  "TextureBufferComponent": "ComponentsTextureBufferComponent",
-  "TextureComponent": "ComponentsTextureComponent",
-  "TransformComponent": "ComponentsTransformComponent"
-},
-"Constraint": {
-  "ChildrenComponentConstraint": "ConstraintChildrenComponentConstraint",
-  "NoChildConstraint": "ConstraintNoChildConstraint",
-  "ParentConstraint": "ConstraintParentConstraint",
-  "RootConstraint": "ConstraintRootConstraint"
-},
-"Converters": {
-  "Angle2DConverter": "ConvertersAngle2DConverter",
-  "BooleanConverter": "ConvertersBooleanConverter",
-  "CanvasSizeConverter": "ConvertersCanvasSizeConverter",
-  "Color3Converter": "ConvertersColor3Converter",
-  "Color4Converter": "ConvertersColor4Converter",
-  "ComponentConverter": "ConvertersComponentConverter",
-  "EnumConverter": "ConvertersEnumConverter",
-  "GeometryConverter": "ConvertersGeometryConverter",
-  "MaterialConverter": "ConvertersMaterialConverter",
-  "NumberArrayConverter": "ConvertersNumberArrayConverter",
-  "NumberConverter": "ConvertersNumberConverter",
-  "ObjectConverter": "ConvertersObjectConverter",
-  "Rotation3Converter": "ConvertersRotation3Converter",
-  "StringArrayConverter": "ConvertersStringArrayConverter",
-  "StringConverter": "ConvertersStringConverter",
-  "Texture2DConverter": "ConvertersTexture2DConverter",
-  "TextureConverter": "ConvertersTextureConverter",
-  "Vector2Converter": "ConvertersVector2Converter",
-  "Vector3Converter": "ConvertersVector3Converter",
-  "Vector4Converter": "ConvertersVector4Converter",
-  "ViewportConverter": "ConvertersViewportConverter"
-}
-}
-         */
-        const objectCode = asJSIndex(jsonCode,separated);
+        const jsonCode = JSON.stringify(structureObject, null, "  ");
+        const objectCode = asJSIndex(jsonCode, separated);
         const imports = [];
-        for(let keyPath in separated){
-          imports.push({
-            path:"./" + keyPath,
-            key:jsSafeString(separated[keyPath].reduce((p, c) => p + c))
-          });
+        for (let keyPath in separated) {
+            imports.push({
+                path: "./" + keyPath.replace(/\.js/g, ""),
+                key: jsSafeString(separated[keyPath].reduce((p, c) => p + c))
+            });
         }
-        const templateArgs = {
-          exportObject:objectCode,
-          imports:imports
+        let templateArgs = {
+            exportObject: objectCode,
+            imports: imports
         };
-         console.log(await templateAsync(path.normalize(__dirname + "/../../src/generate-index/index-template.template"),templateArgs));
+        await writeFileAsync(path.join(cwd, argv.destJs), await templateAsync(path.normalize(__dirname + "/../../src/generate-index/index-template.template"), templateArgs));
+        // generate dts
+        templateArgs.exportObject = templateArgs.exportObject.replace(/,/g,";").replace(/([\w\}])$(?=\n *\})/mg,"$1;").replace(/("\s*:\s*)(\w+)/g,"$1typeof $2");
+        await writeFileAsync(path.join(cwd, argv.destDts), await templateAsync(path.normalize(__dirname + "/../../src/generate-index/dts-template.template"), templateArgs));
     } catch (e) {
         console.log(e);
     }
