@@ -1,11 +1,11 @@
 {
   "name": "grimoirejs-cauldron",
-  "version": "1.5.13",
+  "version": "2.0.0",
   "description": "The build environment for grimoirejs.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "watch 'npm run prepublish' ./src",
-    "prepublish": "babel ./src --watch --out-dir ./lib --presets es2015,stage-2 --plugins transform-runtime"
+    "prepublish": "babel ./src --out-dir ./lib --presets es2015,stage-2 --plugins transform-runtime"
   },
   "keywords": [
     "grimoire"
