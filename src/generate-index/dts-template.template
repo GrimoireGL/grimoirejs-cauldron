@@ -1,7 +1,0 @@
-{{#each imports}}
-  import {{key}} from "{{path}}";
-{{/each}}
-
-interface Expose{{exportObject}};
-
-export default Expose;

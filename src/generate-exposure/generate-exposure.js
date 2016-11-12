@@ -35,8 +35,8 @@ function jsSafeString(str) {
 function asJSIndex(jsonStr, sepDirs) {
     for (let pathKey in sepDirs) {
         const keyName = jsSafeString(sepDirs[pathKey].reduce((p, c) => p + c));
-        const regex = new RegExp(`"${keyName}"`);
-        jsonStr = jsonStr.replace(regex, keyName);
+        const regex = new RegExp(`(: *)"${keyName}"`);
+        jsonStr = jsonStr.replace(regex, "$1" + keyName);
     }
     return jsonStr;
 }
@@ -45,25 +45,25 @@ async function generateIndex() {
     try {
         const cwd = process.cwd(); // current working directory
         const pkgJson = path.join(cwd, "package.json");
-        let main = JSON.parse(await readFileAsync(pkgJson)).main;
-        let destFile = path.resolve(path.join(cwd, argv.destJs));
-        if (!main) {
-          throw new Error("main field is not defined on package.json");
-        }
-        main = path.resolve(main);
-        const baseUrl = path.join(cwd, argv.src); // absolute path of source directory
-        const detectedFiles = await globAsync(path.join(cwd, argv.src, "**/*.js")); // glob all javascript files
+        let destFileLocation = path.resolve(path.join(cwd, argv.dest));
+        const mainFileLocation = path.resolve(path.join(cwd,argv.main));
+        const basePath = path.join(cwd, argv.src); // absolute path of source directory
+        const detectedFiles = await globAsync(path.join(cwd, argv.src, argv.ts?"**/*.ts":"**/*.js")); // glob all javascript files
         const pathMap = {};
+        const interfaces = [];
         // listup files containing `export default`
         for (let i = 0; i < detectedFiles.length; i++) {
-            const relative = path.relative(baseUrl, detectedFiles[i]);
+            const relative = path.relative(basePath, detectedFiles[i]);
             const absolute = path.resolve(detectedFiles[i]);
-            if (destFile === absolute || main === absolute) {
+            if (destFileLocation === absolute || mainFileLocation === absolute) {
                 continue;
             }
             const content = await readFileAsync(detectedFiles[i]);
-            if (content.indexOf("export default") >= 0) { // to ignore interfaces
-                pathMap[relative] = path.parse(relative);
+            if (content.indexOf("interface ") >= 0 && content.indexOf("class ") <0) { // to ignore interfaces
+              interfaces.push(relative);
+              continue;
+            }else{
+              pathMap[relative] = path.parse(relative);
             }
         }
         // separate relative path by '/' or '\'
@@ -82,18 +82,28 @@ async function generateIndex() {
         const imports = [];
         for (let keyPath in separated) {
             imports.push({
-                path: "./" + keyPath.replace(/\.js/g, ""),
+                path: "./" + keyPath.replace(/\.js|\.ts/g, ""),
                 key: jsSafeString(separated[keyPath].reduce((p, c) => p + c))
             });
         }
+        let index = 0;
+        for(let pathes of interfaces){
+          index ++;
+          imports.push({
+            path:"./" + pathes.replace(/\.ts/g,""),
+            key: "__INTERFACE__" + index
+          });
+        }
         let templateArgs = {
             exportObject: objectCode,
-            imports: imports
+            imports: imports,
+            mainPath: "./" + path.relative(basePath,mainFileLocation).replace(/\.ts|\.js/g,"")
         };
-        await writeFileAsync(path.join(cwd, argv.destJs), await templateAsync(path.normalize(__dirname + "/../../src/generate-index/index-template.template"), templateArgs));
-        // generate dts
-        templateArgs.exportObject = templateArgs.exportObject.replace(/,/g,";").replace(/([\w\}])$(?=\n *\})/mg,"$1;").replace(/("\s*:\s*)(\w+)/g,"$1typeof $2");
-        await writeFileAsync(path.join(cwd, argv.destDts), await templateAsync(path.normalize(__dirname + "/../../src/generate-index/dts-template.template"), templateArgs));
+        if (!argv.ts) {
+            await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/generate-exposure/index-template.template"), templateArgs));
+        } else {
+            await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/generate-exposure/ts-template.template"), templateArgs));
+        }
     } catch (e) {
         console.log(e);
     }
