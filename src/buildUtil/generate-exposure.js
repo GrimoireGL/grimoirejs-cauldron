@@ -9,21 +9,7 @@ import {
 } from "yargs";
 import path from "path";
 import chalk from "chalk";
-
-function getSuffix(name) {
-    const regex = /^grimoirejs\-?(.+)?/;
-    let regexResult;
-    if ((regexResult = regex.exec(name))) {
-        if (regexResult[1]) {
-            return jsSafeString(regexResult[1]);
-        } else {
-            return undefined;
-        }
-    } else {
-        console.warn(chalk.bgBlack.yellow(`Project name ${name} is not valid for grimoirejs package.`));
-        return jsSafeString(name);
-    }
-}
+import {jsSafeString,getSuffix} from "common";
 
 function generateStructureRecursively(obj, sepDirs, basePath) {
     if (sepDirs.length < 2) {
@@ -44,10 +30,6 @@ function generateStructureRecursively(obj, sepDirs, basePath) {
     }
 }
 
-function jsSafeString(str) {
-    return str.replace(/\./g, "_").replace(/\-/g, "_");
-}
-
 function asJSIndex(jsonStr, sepDirs) {
     for (let pathKey in sepDirs) {
         const keyName = jsSafeString(sepDirs[pathKey].reduce((p, c) => p + c));
@@ -55,21 +37,6 @@ function asJSIndex(jsonStr, sepDirs) {
         jsonStr = jsonStr.replace(regex, "$1" + keyName);
     }
     return jsonStr;
-}
-
-function genRefCode(separatedPath, libPrefix) {
-    let refCode = `	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});`;
-    if (libPrefix) {
-        refCode += `exports.default=window.GrimoireJS.Lib.${libPrefix}`;
-    } else {
-        refCode += `exports.default=window.GrimoireJS`;
-    }
-    for (let i = 0; i < separatedPath.length; i++) {
-        refCode += `.${separatedPath[i]}`;
-    }
-    return refCode + ";";
 }
 
 async function generateIndex() {

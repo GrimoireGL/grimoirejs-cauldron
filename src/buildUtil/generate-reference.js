@@ -1,26 +1,7 @@
 import path from "path";
 import {readFileAsync,globAsync,writeFileAsync} from "../async-helper";
 import {argv} from "yargs";
-
-function jsSafeString(str) {
-    return str.replace(/\./g, "_").replace(/\-/g, "_");
-}
-
-function getSuffix(name) {
-    const regex = /^grimoirejs\-?(.+)?/;
-    let regexResult;
-    if ((regexResult = regex.exec(name))) {
-        if (regexResult[1]) {
-            return jsSafeString(regexResult[1]);
-        } else {
-            return undefined;
-        }
-    } else {
-        console.warn(chalk.bgBlack.yellow(`Project name ${name} is not valid for grimoirejs package.`));
-        return jsSafeString(name);
-    }
-}
-
+import {getSuffix} from "./common";
 
 function genRefCode(separatedPath, libPrefix) {
     let refCode = `	Object.defineProperty(exports, "__esModule", {
