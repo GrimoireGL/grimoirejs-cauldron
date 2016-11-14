@@ -1,6 +1,6 @@
 {
   "name": "grimoirejs-cauldron",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "The build environment for grimoirejs.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
