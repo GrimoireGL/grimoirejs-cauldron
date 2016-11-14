@@ -1,58 +1,49 @@
 {
-  "name": "grimoirejs-cauldron",
-  "version": "2.0.2",
-  "description": "The build environment for grimoirejs.",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "watch 'npm run prepublish' ./src",
-    "prepublish": "babel ./src --out-dir ./lib --presets es2015,stage-2 --plugins transform-runtime"
-  },
-  "keywords": [
-    "grimoire"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/GrimoireGL/grimoirejs-cauldron.git"
-  },
-  "files": [
-    "bin",
-    "lib",
-    "src"
-  ],
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "babel-cli": "^6.14.0",
-    "babel-plugin-transform-runtime": "^6.15.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-stage-2": "^6.13.0",
-    "babel-watch": "^2.0.3",
-    "browserify": "^13.1.1",
-    "chalk": "^1.1.3",
-    "fs-extra": "^0.30.0",
-    "glob": "^7.1.0",
-    "handlebars": "^4.0.5",
-    "http-server": "^0.9.0",
-    "progress": "^1.1.8",
-    "prompt": "^1.0.0",
-    "rollup": "^0.36.0",
-    "rollup-plugin-commonjs": "^5.0.4",
-    "rollup-plugin-inject": "^2.0.0",
-    "rollup-plugin-node-builtins": "^2.0.0",
-    "rollup-plugin-node-resolve": "^2.0.0",
-    "rollup-plugin-sourcemaps": "^0.4.1",
-    "typescript": "^2.0.3",
-    "typescript-awaiter": "^1.0.0",
-    "uglify-js": "^2.7.3",
-    "watch": "^1.0.1",
-    "yargs": "^6.3.0"
-  },
-  "bin": {
-    "cauldron": "./bin/cauldron"
-  },
-  "devDependencies": {},
-  "bugs": {
-    "url": "https://github.com/GrimoireGL/grimoirejs-cauldron/issues"
-  },
-  "homepage": "https://github.com/GrimoireGL/grimoirejs-cauldron#readme"
+    "name": "grimoirejs-cauldron",
+    "version": "2.0.3",
+    "description": "The build environment for grimoirejs.",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "watch 'npm run prepublish' ./src",
+        "prepublish": "babel ./src --out-dir ./lib --presets es2015,stage-2 --plugins transform-runtime"
+    },
+    "keywords": [
+        "grimoire"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/GrimoireGL/grimoirejs-cauldron.git"
+    },
+    "files": [
+        "bin",
+        "lib",
+        "src"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "chalk": "^1.1.3",
+        "fs-extra": "^0.30.0",
+        "glob": "^7.1.0",
+        "handlebars": "^4.0.5",
+        "progress": "^1.1.8",
+        "prompt": "^1.0.0",
+        "uglify-js": "^2.7.3",
+        "watch": "^1.0.1",
+        "yargs": "^6.3.0"
+    },
+    "bin": {
+        "cauldron": "./bin/cauldron"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.14.0",
+        "babel-plugin-transform-runtime": "^6.15.0",
+        "babel-preset-es2015": "^6.18.0",
+        "babel-preset-stage-2": "^6.13.0",
+        "babel-watch": "^2.0.3"
+    },
+    "bugs": {
+        "url": "https://github.com/GrimoireGL/grimoirejs-cauldron/issues"
+    },
+    "homepage": "https://github.com/GrimoireGL/grimoirejs-cauldron#readme"
 }
