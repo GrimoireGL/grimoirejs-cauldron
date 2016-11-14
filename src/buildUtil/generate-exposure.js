@@ -9,7 +9,7 @@ import {
 } from "yargs";
 import path from "path";
 import chalk from "chalk";
-import {jsSafeString,getSuffix} from "common";
+import {jsSafeString,getSuffix} from "./common";
 
 function generateStructureRecursively(obj, sepDirs, basePath) {
     if (sepDirs.length < 2) {
