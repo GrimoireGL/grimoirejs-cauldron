@@ -1,6 +1,6 @@
 {
   "name": "grimoirejs-cauldron",
-  "version": "2.0.0",
+  "version": "1.6.0",
   "description": "The build environment for grimoirejs.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,10 +17,8 @@
   "files": [
     "bin",
     "lib",
-    "src",
-    "polyfill"
+    "src"
   ],
-  "main": "polyfill/index.js",
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -51,32 +49,6 @@
   },
   "bin": {
     "cauldron": "./bin/cauldron"
-  },
-  "grimoire": {
-    "ts": {
-      "lib": "./lib-es6",
-      "temp": "./lib-ts",
-      "src": "./src-debug",
-      "es5": "./lib-es5"
-    },
-    "main": "test.ts",
-    "test": {
-      "src": "./test",
-      "temp": "./lib-test"
-    },
-    "out": {
-      "es6": "./product/grimoire.es2016.js",
-      "es5": "./product/grimoire.js"
-    },
-    "txt-exts": [
-      ".txt"
-    ],
-    "doc": {
-      "src": "./doc",
-      "header": "./doc/header.md",
-      "footer": "./doc/footer.md",
-      "dest": "./lib-md/index.md"
-    }
   },
   "devDependencies": {},
   "bugs": {

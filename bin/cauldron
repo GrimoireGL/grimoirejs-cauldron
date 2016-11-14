@@ -35,12 +35,38 @@ yargs.usage("<cmd> [args]")
                 alias: "t",
                 describe: "This project using typescript or not"
             },
-            main:{
-              alias:"m",
-              describe:"path of main file"
+            main: {
+                alias: "m",
+                describe: "path of main file"
+            },
+            debug: {
+                describe: "debug mode"
             }
         },
         function(argv) {
-            require("../lib/generate-exposure/generate-exposure");
+            require("../lib/buildUtil/generate-exposure");
+        }).
+command("generate-reference", {
+            src: {
+                alias: "s",
+                describe: "The folder containing ES6 codes to generate indices"
+            },
+            dest: {
+                alias: "d",
+                describe: "Destination of the file"
+            },
+            main: {
+                alias: "m",
+                describe: "path of main file"
+            },
+            dts: {
+                alias: "d",
+                describe: "path of dts files"
+            },
+            debug: {
+                describe: "debug mode"
+            }
+        }, function(argv) {
+            require("../lib/buildUtil/generate-reference");
         })
-    .help().argv;
+        .help().argv;
