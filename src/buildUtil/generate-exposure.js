@@ -103,12 +103,14 @@ async function generateIndex() {
             exportObject: objectCode,
             imports: imports,
             mainPath: "./" + path.relative(basePath, mainFileLocation).replace(/\.ts|\.js/g, ""),
-            registerCode:projectSuffix?`window["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;`:""
+            registerCode:projectSuffix?`window["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;`:"",
+            version:pkgJson.version,
+            name:pkgJson.name
         };
         if (!argv.ts) {
-            await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/generate-exposure/index-template.template"), templateArgs));
+            await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/buildUtil/index-template.template"), templateArgs));
         } else {
-            await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/generate-exposure/ts-template.template"), templateArgs));
+            await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/buildUtil/ts-template.template"), templateArgs));
         }
     } catch (e) {
         console.log(e);
