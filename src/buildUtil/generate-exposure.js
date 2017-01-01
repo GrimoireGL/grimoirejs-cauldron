@@ -103,7 +103,7 @@ async function generateIndex() {
             exportObject: objectCode,
             imports: imports,
             mainPath: "./" + path.relative(basePath, mainFileLocation).replace(/\.ts|\.js/g, ""),
-            registerCode:projectSuffix?`window["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;`:"",
+            registerCode:projectSuffix?`window["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;`:"window[\"GrimoireJS\"][\"__VERSION__\"]=__VERSION__;\n",
             version:pkgJson.version,
             name:pkgJson.name
         };
