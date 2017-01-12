@@ -2,71 +2,84 @@
 
 var yargs = require("yargs");
 yargs.usage("<cmd> [args]")
-    .command('scaffold', "Scaffold grimoirejs files", {
-        name: {
-            alias: "n",
-            describe: "The name of the file which you want generate"
-        },
-        type: {
-            alias: "t",
-            describe: "The type of the file you want to generate"
-        },
-        force: {
-            describe: "Force override scaffolded file even if destination file was already existing."
-        }
-    }, function() {
-        require("../lib/scaffold/scaffold");
-    })
-    .command("doc", "Scaffold document files", {
+  .command('scaffold', "Scaffold grimoirejs files", {
+    name: {
+      alias: "n",
+      describe: "The name of the file which you want generate"
+    },
+    type: {
+      alias: "t",
+      describe: "The type of the file you want to generate"
+    },
+    force: {
+      describe: "Force override scaffolded file even if destination file was already existing."
+    }
+  }, function () {
+    require("../lib/scaffold/scaffold");
+  })
+  .command("doc", "Scaffold document files", {
 
-    }, function() {
-        require("../lib/doc/doc").default();
-    })
-    .command("generate-exposure", {
-            src: {
-                alias: "s",
-                describe: "The folder containing ES6 codes to generate indices"
-            },
-            dest: {
-                alias: "d",
-                describe: "Destination of the file"
-            },
-            ts: {
-                alias: "t",
-                describe: "This project using typescript or not"
-            },
-            main: {
-                alias: "m",
-                describe: "path of main file"
-            },
-            debug: {
-                describe: "debug mode"
-            }
-        },
-        function(argv) {
-            require("../lib/buildUtil/generate-exposure");
-        }).
+  }, function () {
+    require("../lib/doc/doc").default();
+  })
+  .command("moajo", "generate docment from source files!", {
+    src: {
+      alias: "s",
+      describe: "source code file. needs .ts or .js.",
+      default: "aaaa"
+    },
+    dest: {
+      alias: "d",
+      describe: "output directory."
+    }
+  }, function () {
+    require("../lib/doc/moajo");
+  })
+  .command("generate-exposure", {
+      src: {
+        alias: "s",
+        describe: "The folder containing ES6 codes to generate indices"
+      },
+      dest: {
+        alias: "d",
+        describe: "Destination of the file"
+      },
+      ts: {
+        alias: "t",
+        describe: "This project using typescript or not"
+      },
+      main: {
+        alias: "m",
+        describe: "path of main file"
+      },
+      debug: {
+        describe: "debug mode"
+      }
+    },
+    function (argv) {
+      require("../lib/buildUtil/generate-exposure");
+    }).
 command("generate-reference", {
-            src: {
-                alias: "s",
-                describe: "The folder containing ES6 codes to generate indices"
-            },
-            dest: {
-                alias: "d",
-                describe: "Destination of the file"
-            },
-            main: {
-                alias: "m",
-                describe: "path of main file"
-            },
-            dts: {
-                alias: "d",
-                describe: "path of dts files"
-            },
-            debug: {
-                describe: "debug mode"
-            }
-        }, function(argv) {
-            require("../lib/buildUtil/generate-reference");
-        })
-        .help().argv;
+    src: {
+      alias: "s",
+      describe: "The folder containing ES6 codes to generate indices"
+    },
+    dest: {
+      alias: "d",
+      describe: "Destination of the file"
+    },
+    main: {
+      alias: "m",
+      describe: "path of main file"
+    },
+    dts: {
+      alias: "d",
+      describe: "path of dts files"
+    },
+    debug: {
+      describe: "debug mode"
+    }
+  }, function (argv) {
+    require("../lib/buildUtil/generate-reference");
+  })
+  .help().argv;
