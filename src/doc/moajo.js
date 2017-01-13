@@ -9,7 +9,6 @@ import {
 import {
   globAsync,
   readFileAsync,
-  templateAsync,
   writeFileAsync
 } from "../async-helper";
 
