@@ -23,18 +23,14 @@ yargs.usage("<cmd> [args]")
       describe: "The folder containing ES6 codes to generate indices",
       default: "src"
     },
-    dest: {
-      alias: "d",
-      describe: "Destination of the file",
-      default: "doc"
+    out: {
+      alias: "o",
+      describe: "output file.",
+      default: "grdoc.json"
     },
     ts: {
       alias: "t",
       describe: "This project using typescript or not"
-    },
-    clear: {
-      alias: "c",
-      describe: "remove dest directory before generate document."
     },
   }, function () {
     require("../lib/doc/moajo");
