@@ -1,5 +1,6 @@
 import path from 'path';
 import comments from 'js-comments';
+import del from 'del';
 
 import {
   argv
@@ -47,20 +48,30 @@ function getIndex(source, line, target) {
 }
 
 function getLine(source, line) {
-  let currentLine = 1;
-  let s = 0;
-  for (let i = 0; i < source.length; i++) {
-    if (currentLine === line && source[i] === "\n") {
-      return source.substring(s, i);
-    }
-    if (source[i] === "\n") {
-      currentLine++;
-      continue;
-    }
-  }
+  return source.split("\n")[line - 1];
 }
 
 function genComponentDoc(src, obj) {
+  if (!obj) { // find by path.
+    const lines = src.split(/\r\n|\r|\n/);
+    obj = {
+      comment: {
+        code: null,
+        end: null
+      }
+    };
+    for (let i = 0; i < lines.length; i++) {
+      const m = lines[i].match(/export *default *class */);
+      if (m) {
+        obj.comment.code = lines[i];
+        obj.comment.end = i;
+        break;
+      }
+    }
+    if (!obj.comment.code) {
+      return null;
+    }
+  }
   const code = obj.comment.code;
   const front = code.substring(0, code.indexOf("{"));
   const content = getBraceContent(src, getIndex(src, obj.comment.end + 1, "{"));
@@ -75,32 +86,38 @@ function genComponentDoc(src, obj) {
     attributes: {}
   };
 
-  const c = comments.parse(componentSource, {});
-  const b = {};
-  c.forEach(obj => {
-    const name = obj.comment.code.match(/(\w+):/)[1];
-    b[name] = {
-      description: obj.description || "",
-    };
-  });
+  // attribute eval parsing.
   const m = componentSource.search(/static *(?:get)? *(attributes)/gm);
   if (m !== -1) {
     let lastindex = componentSource.indexOf("{", m);
-
-
     lastindex = componentSource.indexOf("{", lastindex + 1);
 
     const a = getBraceContent(componentSource, lastindex);
-    console.log(a);
-    const atrs = eval(`(${a})`);
-    for (let key in atrs) {
-      const aaa = atrs[key];
-      const o = {};
-      for (let key2 in aaa) {
-        o[key2] = String(aaa[key2]);
+
+    // get comments
+    const b = {};
+    comments.parse(a).forEach(obj => {
+      const name = obj.comment.code.match(/(\w+):/)[1];
+      b[name] = {
+        description: obj.description || "",
+      };
+    });
+
+    // source eval
+    try {
+      const atrs = eval(`(${a})`);
+      for (let key in atrs) {
+        const aaa = atrs[key];
+        const o = {};
+        for (let key2 in aaa) {
+          o[key2] = String(aaa[key2]);
+        }
+        o.description = b[key] ? b[key].description : "";
+        ret.attributes[key] = o;
       }
-      o.description = b[key] ? b[key].description : "";
-      ret.attributes[key] = o;
+    } catch (e) {
+      // console.log(e);
+      console.warn("attribute cant parse.");
     }
   }
 
@@ -108,17 +125,39 @@ function genComponentDoc(src, obj) {
 }
 
 function genConverterDoc(src, comment) {
+  if (!comment) { // find by path.
+    const lines = src.split(/\r\n|\r|\n/);
+    comment = {
+      comment: {
+        code: null,
+        end: null
+      }
+    };
+    for (let i = 0; i < lines.length; i++) {
+      const m = lines[i].match(/export *default *function */);
+      if (m) {
+        comment.comment.code = lines[i];
+        comment.comment.end = i;
+        break;
+      }
+    }
+    if (!comment.comment.code) {
+      return null;
+    }
+  }
   const code = comment.comment.code;
-  const front = code.substring(0, code.indexOf("{"));
+  const front = code.substring(0, code.lastIndexOf("{"));
   const content = getBraceContent(src, getIndex(src, comment.comment.end + 1, "{"));
   const converterSrc = front + content;
 
   const firstLine = getLine(converterSrc, 1);
   const className = firstLine.match(/function +(\w+) *\(/)[1];
   const parameters = {};
-  comment.gr_props.forEach(p => {
-    parameters[p.type] = p.description || "";
-  });
+  if (comment.gr_props) {
+    comment.gr_props.forEach(p => {
+      parameters[p.type] = p.description || "";
+    });
+  }
 
   return {
     name: className,
@@ -130,6 +169,26 @@ function genConverterDoc(src, comment) {
 }
 
 function genNodeDoc(src, comment) {
+  if (!comment) { // find by path.
+    const lines = src.split(/\r\n|\r|\n/);
+    comment = {
+      comment: {
+        code: null,
+        end: null
+      }
+    };
+    for (let i = 0; i < lines.length; i++) {
+      const m = lines[i].match(/export *default *\{/);
+      if (m) {
+        comment.comment.code = lines[i];
+        comment.comment.end = i;
+        break;
+      }
+    }
+    if (!comment.comment.code) {
+      return null;
+    }
+  }
   const code = comment.comment.code;
   const front = code.substring(0, code.indexOf("{"));
   const content = getBraceContent(src, getIndex(src, comment.comment.end + 1, "{"));
@@ -158,26 +217,52 @@ function genNodeDoc(src, comment) {
 function genDoc(filePath, sourceCode) {
   try {
     const a = comments.parse(sourceCode);
+    const cwd = process.cwd();
+    const rel = path.relative(path.join(cwd, argv.src), filePath);
+    console.log(rel)
     const doc = {
       nodes: [],
       components: [],
       converters: []
     };
+    if (!rel.startsWith(".") && path.basename(filePath).indexOf("Component.") !== -1) {
+      const d = genComponentDoc(sourceCode);
+      if (d) {
+        doc.components.push(d);
+      }
+    } else if (!rel.startsWith(".") && path.basename(filePath).indexOf("Converter.") !== -1) {
+      const d = genConverterDoc(sourceCode);
+      if (d) {
+        doc.converters.push(d);
+      }
+    } else if (rel.startsWith("nodes.")) {
+      const d = genNodeDoc(sourceCode);
+      if (d) {
+        doc.nodes.push(d);
+      }
+    }
 
     a.forEach(obj => {
       if (obj.gr_component === true) {
         const d = genComponentDoc(sourceCode, obj);
-        doc.components.push(d);
+        if (d) {
+          doc.components.push(d);
+        }
       }
       if (obj.gr_converter === true) {
-        doc.converters.push(genConverterDoc(sourceCode, obj));
+        const d = genConverterDoc(sourceCode, obj);
+        if (d) {
+          doc.converters.push(d);
+        }
       }
       if (obj.gr_node === true) {
-        doc.nodes.push(genNodeDoc(sourceCode, obj));
+        const d = genNodeDoc(sourceCode, obj);
+        if (d) {
+          doc.nodes.push(d);
+        }
       }
 
     });
-    console.log(doc);
     return doc;
   } catch (e) {
     console.log(e);
@@ -190,12 +275,16 @@ async function getTargetFilePathes(targetDir) {
 
 async function main() {
   const ext = argv.ts ? ".ts" : ".js"
-  const nodesPath = argv.nodes || `src/nodes${ext}`;
+  // const nodesPath = argv.nodes || `src/nodes${ext}`;
   const dest = argv.dest || "doc";
   const cwd = process.cwd();
-  // const destFileLocation = path.resolve(path.join(cwd, argv.dest));
-  // const mainFileLocation = path.resolve(path.join(cwd, argv.main));
-  const basePath = path.join(cwd, argv.src);
+  console.log(`src directory: ${path.join(cwd, argv.src)}`);
+
+  if (argv.clear) {
+    const d = path.join(cwd, dest);
+    const paths = await del([d + "/**"]);
+    console.log(`clear dest dir: ${d}`);
+  }
 
   const projName = JSON.parse(await readFileAsync(path.join(cwd, "package.json"))).name;
   const grdoc = {
@@ -205,13 +294,8 @@ async function main() {
     converters: []
   };
 
-  // node document generate.
-  // const nodes2 = await readFileAsync(path.join(cwd, nodesPath));
-  // const nodeDoc =genNodeDoc(nodes2);
-  // console.log(nodeDoc);
-  // return;
   const detectedFiles = await getTargetFilePathes(path.join(cwd, argv.src));
-  // console.log(detectedFiles);
+  console.log(`detected file:${detectedFiles.length}`);
 
 
   for (var i = 0; i < detectedFiles.length; i++) {
@@ -231,7 +315,9 @@ async function main() {
     doc.converters.forEach(c => {
       grdoc.converters.push(c);
     });
-    writeFileAsync(replace, JSON.stringify(doc, null, "\t"));
+    if (doc.nodes.length > 0 || doc.components.length > 0 || doc.converters.length > 0) {
+      writeFileAsync(replace, JSON.stringify(doc, null, "\t"));
+    }
   }
 
   writeFileAsync(path.join(cwd, "grdoc.json"), JSON.stringify(grdoc, null, "\t"));
