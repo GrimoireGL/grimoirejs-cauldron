@@ -78,8 +78,8 @@ function genComponentDoc(src, obj) {
 
   const firstLine = getLine(componentSource, 1);
   const className = firstLine.match(/class +(\w+)/)[1];
+
   const ret = {
-    name: className,
     description: obj.description || "",
     super: obj.super,
     attributes: {}
@@ -116,11 +116,13 @@ function genComponentDoc(src, obj) {
       }
     } catch (e) {
       // console.log(e);
-      console.warn("attribute cant parse.");
+      console.warn("attribute cant parse: " + className);
     }
   }
 
-  return ret;
+  const r = {};
+  r[className] = ret;
+  return r;
 }
 
 function genConverterDoc(src, comment) {
@@ -158,13 +160,14 @@ function genConverterDoc(src, comment) {
     });
   }
 
-  return {
-    name: className,
+  const ret = {};
+  ret[className] = {
     description: comment.description || "",
     output: comment.gr_output,
     input: comment.gr_input,
     parameters: parameters
   };
+  return ret;
 }
 
 function genNodeDoc(src, comment) {
@@ -218,26 +221,31 @@ function genDoc(filePath, sourceCode) {
     const a = comments.parse(sourceCode);
     const cwd = process.cwd();
     const rel = path.relative(path.join(cwd, argv.src), filePath);
-    console.log(rel)
     const doc = {
-      nodes: [],
+      nodes: {},
       components: [],
       converters: []
     };
     if (!rel.startsWith(".") && path.basename(filePath).indexOf("Component.") !== -1) {
       const d = genComponentDoc(sourceCode);
       if (d) {
-        doc.components.push(d);
+        for (let key in d) {
+          doc.components[key] = d[key];
+        }
       }
     } else if (!rel.startsWith(".") && path.basename(filePath).indexOf("Converter.") !== -1) {
       const d = genConverterDoc(sourceCode);
       if (d) {
-        doc.converters.push(d);
+        for (let key in d) {
+          doc.converters[key] = d[key];
+        }
       }
     } else if (rel.startsWith("nodes.")) {
       const d = genNodeDoc(sourceCode);
       if (d) {
-        doc.nodes.push(d);
+        for (let key in d) {
+          doc.nodes[key] = d[key];
+        }
       }
     }
 
@@ -245,26 +253,32 @@ function genDoc(filePath, sourceCode) {
       if (obj.gr_component === true) {
         const d = genComponentDoc(sourceCode, obj);
         if (d) {
-          doc.components.push(d);
+          for (let key in d) {
+            doc.components[key] = d[key];
+          }
         }
       }
       if (obj.gr_converter === true) {
         const d = genConverterDoc(sourceCode, obj);
         if (d) {
-          doc.converters.push(d);
+          for (let key in d) {
+            doc.converters[key] = d[key];
+          }
         }
       }
       if (obj.gr_node === true) {
         const d = genNodeDoc(sourceCode, obj);
         if (d) {
-          doc.nodes.push(d);
+          for (let key in d) {
+            doc.nodes[key] = d[key];
+          }
         }
       }
 
     });
     return doc;
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 }
 
@@ -273,54 +287,57 @@ async function getTargetFilePathes(targetDir) {
 }
 
 async function main() {
-  const ext = argv.ts ? ".ts" : ".js"
-  // const nodesPath = argv.nodes || `src/nodes${ext}`;
-  const dest = argv.dest || "doc";
-  const cwd = process.cwd();
-  console.log(`src directory: ${path.join(cwd, argv.src)}`);
+  try {
+    const ext = argv.ts ? ".ts" : ".js"
+    // const nodesPath = argv.nodes || `src/nodes${ext}`;
+    const cwd = process.cwd();
+    // console.log(`src directory: ${path.join(cwd, argv.src)}`);
 
-  if (argv.clear) {
-    const d = path.join(cwd, dest);
-    const paths = await del([d + "/**"]);
-    console.log(`clear dest dir: ${d}`);
-  }
+    // if (argv.clear) {
+    //   const d = path.join(cwd, dest);
+    //   const paths = await del([d + "/**"]);
+    //   // console.log(`clear dest dir: ${d}`);
+    // }
 
-  const projName = JSON.parse(await readFileAsync(path.join(cwd, "package.json"))).name;
-  const grdoc = {
-    name: projName,
-    nodes: [],
-    components: [],
-    converters: []
-  };
+    const projName = JSON.parse(await readFileAsync(path.join(cwd, "package.json"))).name;
+    const grdoc = {
+      name: projName,
+      nodes: {},
+      components: {},
+      converters: {}
+    };
 
-  const detectedFiles = await getTargetFilePathes(path.join(cwd, argv.src));
-  console.log(`detected file:${detectedFiles.length}`);
+    const detectedFiles = await getTargetFilePathes(path.join(cwd, argv.src));
+    // console.log(`detected file:${detectedFiles.length}`);
 
 
-  for (var i = 0; i < detectedFiles.length; i++) {
-    const file = detectedFiles[i];
-    console.log("parsing...:" + file);
-    const rel = path.relative(cwd, file);
-    const replace = rel.replace(/[^\/]+\//, dest + "/");
-    // console.log(replace);
-    const content = await readFileAsync(file);
-    const doc = genDoc(file, content);
-    doc.nodes.forEach(n => {
-      grdoc.nodes.push(n);
-    });
-    doc.components.forEach(c => {
-      grdoc.components.push(c);
-    });
-    doc.converters.forEach(c => {
-      grdoc.converters.push(c);
-    });
-    if (doc.nodes.length > 0 || doc.components.length > 0 || doc.converters.length > 0) {
-      writeFileAsync(replace, JSON.stringify(doc, null, "\t"));
+    for (var i = 0; i < detectedFiles.length; i++) {
+      const file = detectedFiles[i];
+      // console.log("parsing...:" + file);
+      const rel = path.relative(cwd, file);
+      // const replace = rel.replace(/[^\/]+\//, dest + "/");
+      // console.log(replace);
+      const content = await readFileAsync(file);
+      const doc = genDoc(file, content);
+      for (let key in doc.nodes) {
+        grdoc.nodes[key] = doc.nodes[key];
+      }
+      for (let key in doc.components) {
+        grdoc.components[key] = doc.components[key];
+      }
+      for (let key in doc.converters) {
+        grdoc.converters[key] = doc.converters[key];
+      }
+      // if (doc.nodes.length > 0 || doc.components.length > 0 || doc.converters.length > 0) {
+      //   writeFileAsync(replace, JSON.stringify(doc, null, "\t"));
+      // }
     }
+    console.log(JSON.stringify(grdoc, null, "\t"));
+  } catch (e) {
+    console.error(e);
   }
 
-  writeFileAsync(path.join(cwd, "grdoc.json"), JSON.stringify(grdoc, null, "\t"));
+  // writeFileAsync(path.join(cwd, "grdoc.json"), JSON.stringify(grdoc, null, "\t"));
 }
-
 
 main();
