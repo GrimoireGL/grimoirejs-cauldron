@@ -29,9 +29,9 @@ $ npm install {{name}} --save
 ### コンポーネント
 
 {{#if components}}
-  |コンバーター名|説明|
+  |コンポーネント名|説明|
   |:-:|:-:|
-  {{#each converters}}
+  {{#each components}}
   |[`<{{@key}}>`](#{{@key}}コンポーネント)|{{this.short_description}}|
   {{/each}}
 {{else}}
@@ -41,10 +41,10 @@ $ npm install {{name}} --save
 ### コンバーター
 
 {{#if converters}}
-  |ノード名|説明|
+  |コンバーター名|説明|
   |:-:|:-:|
-  {{#each components}}
-  |[`<{{@key}}>`](#{{@key}}コンバーター)|{{this.short_description}}|
+  {{#each converters}}
+  |[`{{@key}}`](#{{@key}}コンバーター)|{{this.short_description}}|
   {{/each}}
 {{else}}
   **このプラグインによって登録されるコンポーネントはありません。**  
@@ -95,6 +95,7 @@ $ npm install {{name}} --save
 {{#each this.attributes}}
 |{{@key}}|{{this.converter}}|{{this.short_description}}|
 {{/each}}
+{{/if}}
 
 {{#each this.attributes}}
 
@@ -106,8 +107,6 @@ $ npm install {{name}} --save
 {{this.description}}
 
 {{/each}}
-
-{{/if}}
 
 {{/each}}
 {{/if}}
