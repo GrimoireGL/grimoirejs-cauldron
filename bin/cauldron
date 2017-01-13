@@ -17,12 +17,7 @@ yargs.usage("<cmd> [args]")
   }, function () {
     require("../lib/scaffold/scaffold");
   })
-  .command("doc", "Scaffold document files", {
-
-  }, function () {
-    require("../lib/doc/doc").default();
-  })
-  .command("moajo", "generate docment from source files!", {
+  .command("doc", "generate docment from source files", {
     src: {
       alias: "s",
       describe: "The folder containing ES6 codes to generate indices",
