@@ -1,3 +1,4 @@
+import chalk from "chalk";
 export function jsSafeString(str) {
     return str.replace(/\./g, "_").replace(/\-/g, "_");
 }

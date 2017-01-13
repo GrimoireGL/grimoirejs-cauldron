@@ -8,7 +8,7 @@ function genRefCode(separatedPath, libPrefix) {
 	    value: true
 	});`;
     if (libPrefix) {
-        refCode += `exports.default=window.GrimoireJS.Lib.${libPrefix}`;
+        refCode += `exports.default=window.GrimoireJS.lib.${libPrefix}`;
     } else {
         refCode += `exports.default=window.GrimoireJS`;
     }
