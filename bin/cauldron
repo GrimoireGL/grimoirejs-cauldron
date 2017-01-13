@@ -17,21 +17,25 @@ yargs.usage("<cmd> [args]")
   }, function () {
     require("../lib/scaffold/scaffold");
   })
-  .command("doc", "Scaffold document files", {
-
-  }, function () {
-    require("../lib/doc/doc").default();
-  })
-  .command("moajo", "generate docment from source files!", {
+  .command("doc", "generate docment from source files", {
     src: {
       alias: "s",
-      describe: "source code file. needs .ts or .js.",
-      default: "aaaa"
+      describe: "The folder containing ES6 codes to generate indices",
+      default: "src"
     },
     dest: {
       alias: "d",
-      describe: "output directory."
-    }
+      describe: "Destination of the file",
+      default: "doc"
+    },
+    ts: {
+      alias: "t",
+      describe: "This project using typescript or not"
+    },
+    clear: {
+      alias: "c",
+      describe: "remove dest directory before generate document."
+    },
   }, function () {
     require("../lib/doc/moajo");
   })
