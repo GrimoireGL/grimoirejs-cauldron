@@ -20,7 +20,7 @@ $ npm install {{name}} --save
   |ノード名|説明|
   |:-:|:-:|
   {{#each nodes}}
-  |[`<{{@key}}>`](#{{@key}}ノード)|{{this.short_description}}
+  |[`<{{@key}}>`](#{{@key}}ノード)|{{this.short_description}}|
   {{/each}}
 {{else}}
   **このプラグインによって登録されるノードはありません。**  
@@ -32,7 +32,7 @@ $ npm install {{name}} --save
   |コンバーター名|説明|
   |:-:|:-:|
   {{#each converters}}
-  |[`<{{@key}}>`](#{{@key}}コンポーネント)|{{this.short_description}}
+  |[`<{{@key}}>`](#{{@key}}コンポーネント)|{{this.short_description}}|
   {{/each}}
 {{else}}
   **このプラグインによって登録されるコンポーネントはありません。**  
@@ -44,7 +44,7 @@ $ npm install {{name}} --save
   |ノード名|説明|
   |:-:|:-:|
   {{#each components}}
-  |[`<{{@key}}>`](#{{@key}}コンバーター)|{{this.short_description}}
+  |[`<{{@key}}>`](#{{@key}}コンバーター)|{{this.short_description}}|
   {{/each}}
 {{else}}
   **このプラグインによって登録されるコンポーネントはありません。**  
@@ -57,7 +57,17 @@ $ npm install {{name}} --save
 
 ### {{@key}}ノード
 
+{{#if this.super}}
+**継承元:&lt;{{this.super}}&gt;**
+{{/if}}
+
 {{this.description}}
+
+#### コンポーネント
+
+{{#each this.components}}
+* {{this}}
+{{/each}}
 
 {{/each}}
 
@@ -71,11 +81,46 @@ $ npm install {{name}} --save
 
 ### {{@key}}コンポーネント
 
+{{#if this.super}}
+  **継承:{{this.super}}コンポーネント**  
+{{/if}}
+
+{{this.description}}
+
+{{#if this.attributes}}
+#### 属性
+
+|名前|コンバーター|詳細|
+|:-:|:-:|:-:|
+{{#each this.attributes}}
+|{{@key}}|{{this.converter}}|{{this.short_description}}|
+{{/each}}
+
+{{#each this.attributes}}
+
+##### {{@key}}属性
+
+**初期値** ・・・ `{{this.default}}`  
+**コンバーター** ・・・ `{{this.converter}}`
+
+{{this.description}}
+
+{{/each}}
+
+{{/if}}
+
 {{/each}}
 {{/if}}
 
 {{#if converters}}
 
 ## コンバーター詳細
+
+{{#each converters}}
+### {{@key}}コンバーター
+
+{{this.description}}
+
+{{/each}}
 
 {{/if}}

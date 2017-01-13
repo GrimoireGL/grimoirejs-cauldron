@@ -8,30 +8,27 @@ import path from "path";
 
 const source = {
 	"name": "grimoirejs-fundamental",
-	"nodes": [
-		{
-			"goml": {
-				"description": "ルートノード",
-				"components": [
-					"CanvasInitializer",
-					"LoopManager",
-					"AssetLoadingManager",
-					"GeometryRegistory",
-					"RendererManager",
-					"Fullscreen"
-				]
-			}
+	"nodes": {
+		"goml": {
+			"description": "ルートノード",
+			"components": [
+				"CanvasInitializer",
+				"LoopManager",
+				"AssetLoadingManager",
+				"GeometryRegistory",
+				"RendererManager",
+				"Fullscreen"
+			]
 		}
-	],
-	"components": [
-		{
-			"name": "AssetLoadingManagerComponent",
+	},
+	"components": {
+		"AssetLoadingManagerComponent": {
 			"description": "",
 			"attributes": {
 				"loadingProgress": {
 					"default": "0",
 					"converter": "Number",
-					"description": ""
+					"description": "アセットのロード状況(読み取り専用)\n0-1で表す。"
 				},
 				"autoStart": {
 					"default": "true",
@@ -45,8 +42,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "CameraComponent",
+		"CameraComponent": {
 			"description": "",
 			"attributes": {
 				"fovy": {
@@ -86,8 +82,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "FullscreenComponent",
+		"FullscreenComponent": {
 			"description": "",
 			"attributes": {
 				"fullscreen": {
@@ -102,8 +97,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "GeometryComponent",
+		"GeometryComponent": {
 			"description": "",
 			"attributes": {
 				"type": {
@@ -118,8 +112,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "GeometryRegistoryComponent",
+		"GeometryRegistoryComponent": {
 			"description": "",
 			"attributes": {
 				"defaultGeometry": {
@@ -129,8 +122,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "HTMLBinderComponent",
+		"HTMLBinderComponent": {
 			"description": "",
 			"attributes": {
 				"htmlQuery": {
@@ -145,8 +137,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "MaterialComponent",
+		"MaterialComponent": {
 			"description": "",
 			"attributes": {
 				"type": {
@@ -156,8 +147,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "MaterialContainerComponent",
+		"MaterialContainerComponent": {
 			"description": "",
 			"attributes": {
 				"material": {
@@ -173,8 +163,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "MaterialImporterComponent",
+		"MaterialImporterComponent": {
 			"description": "",
 			"attributes": {
 				"typeName": {
@@ -189,8 +178,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "MeshRenderer",
+		"MeshRenderer": {
 			"description": "",
 			"attributes": {
 				"geometry": {
@@ -220,8 +208,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "MouseCameraControlComponent",
+		"MouseCameraControlComponent": {
 			"description": "",
 			"attributes": {
 				"rotateSpeed": {
@@ -251,8 +238,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "RenderBufferComponent",
+		"RenderBufferComponent": {
 			"description": "",
 			"attributes": {
 				"name": {
@@ -262,8 +248,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "RendererComponent",
+		"RendererComponent": {
 			"description": "",
 			"attributes": {
 				"camera": {
@@ -279,13 +264,11 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "RendererManagerComponent",
+		"RendererManagerComponent": {
 			"description": "",
 			"attributes": {}
 		},
-		{
-			"name": "RenderQuadComponent",
+		"RenderQuadComponent": {
 			"description": "",
 			"attributes": {
 				"out": {
@@ -330,8 +313,7 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "RenderSceneComponent",
+		"RenderSceneComponent": {
 			"description": "",
 			"attributes": {
 				"layer": {
@@ -382,68 +364,106 @@ const source = {
 				}
 			}
 		},
-		{
-			"name": "SceneComponent",
+		"SceneComponent": {
 			"description": "",
 			"attributes": {}
 		},
-		{
-			"name": "TextureBufferComponent",
+		"TextureBufferComponent": {
 			"description": "",
 			"attributes": {}
 		},
-		{
-			"name": "TextureComponent",
+		"TextureComponent": {
 			"description": "",
 			"attributes": {}
 		},
-		{
-			"name": "TransformComponent",
+		"TransformComponent": {
 			"description": "",
-			"attributes": {}
+			"attributes": {
+				"position": {
+					"converter": "Vector3",
+					"default": "0,0,0",
+					"description": ""
+				},
+				"rotation": {
+					"converter": "Rotation3",
+					"default": "0,0,0,1",
+					"description": ""
+				},
+				"scale": {
+					"converter": "Vector3",
+					"default": "1,1,1",
+					"description": ""
+				},
+				"rawMatrix": {
+					"converter": "Object",
+					"default": "null",
+					"description": ""
+				}
+			}
 		}
-	],
-	"converters": [
-		{
-			"name": "CanvasSizeConverter",
+	},
+	"converters": {
+		"CanvasSizeConverter": {
 			"description": "",
 			"parameters": {}
 		},
-		{
-			"name": "GeometryConverter",
+		"GeometryConverter": {
 			"description": "",
 			"parameters": {}
 		},
-		{
-			"name": "MaterialConverter",
+		"MaterialConverter": {
 			"description": "",
 			"parameters": {}
 		},
-		{
-			"name": "NodeConverter",
+		"NodeConverter": {
 			"description": "",
 			"parameters": {}
 		},
-		{
-			"name": "PositionConverter",
+		"PositionConverter": {
 			"description": "",
 			"parameters": {}
 		},
-		{
-			"name": "TextureConverter",
+		"TextureConverter": {
 			"description": "",
 			"parameters": {}
 		},
-		{
-			"name": "ViewportConverter",
+		"ViewportConverter": {
 			"description": "",
 			"parameters": {}
 		}
-	]
+	}
 };
 
+function getShortDescription(desc){
+  const index = desc.indexOf("\n");
+  if(index === -1){
+    return " ";
+  }
+  return desc.substr(0,index);
+}
+
+function reformat(jsonData){
+  for(let key in jsonData.components){
+    const comp = jsonData.components[key];
+    comp.short_description = getShortDescription(comp.description);
+    for(let attr in comp.attributes){
+      const attrV = comp.attributes[attr];
+      attrV.short_description = getShortDescription(attrV.description);
+    }
+  }
+  for(let key in jsonData.nodes){
+    const node = jsonData.nodes[key];
+    node.short_description = getShortDescription(node.description);
+  }
+  for(let key in jsonData.converters){
+    const conv = jsonData.converters[key];
+    conv.short_description = getShortDescription(conv.description);
+  }
+  return jsonData;
+}
+
 async function generate(){
-  console.log(await templateAsync(path.normalize(__dirname + "/../../src/doc/templates/api-reference.md"), source));
+  console.log(await templateAsync(path.normalize(__dirname + "/../../src/doc/templates/api-reference.md"), reformat(source)));
 }
 
 generate();
