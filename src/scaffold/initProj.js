@@ -8,10 +8,6 @@ import {
 } from "yargs";
 
 function init() {
-  if (!argv.name) {
-    console.warn("name");
-    return;
-  }
   const suffix = getSuffix(argv.name);
   if (suffix) {
     const cwd = process.cwd();
