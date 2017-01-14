@@ -96,7 +96,7 @@ function genComponentDoc(src, obj) {
     // get comments
     const b = {};
     comments.parse(a).forEach(obj => {
-      const name = obj.comment.code.match(/(\w+):/)[1];
+      const name = obj.comment.code.match(/["']?([\w-]+)["']? *:/)[1];
       b[name] = {
         description: obj.description || "",
       };
@@ -226,14 +226,14 @@ function genDoc(filePath, sourceCode) {
       components: [],
       converters: []
     };
-    if (!rel.startsWith(".") && path.basename(filePath).indexOf("Component.") !== -1) {
+    if (!rel.startsWith(".") && filePath.indexOf("/Components/") !== -1 && path.basename(filePath).indexOf("Component.") !== -1) {
       const d = genComponentDoc(sourceCode);
       if (d) {
         for (let key in d) {
           doc.components[key] = d[key];
         }
       }
-    } else if (!rel.startsWith(".") && path.basename(filePath).indexOf("Converter.") !== -1) {
+    } else if (!rel.startsWith(".") && filePath.indexOf("/Converters/") !== -1 && path.basename(filePath).indexOf("Converter.") !== -1) {
       const d = genConverterDoc(sourceCode);
       if (d) {
         for (let key in d) {
@@ -288,16 +288,7 @@ async function getTargetFilePathes(targetDir) {
 
 async function main() {
   try {
-    const ext = argv.ts ? ".ts" : ".js"
-    // const nodesPath = argv.nodes || `src/nodes${ext}`;
     const cwd = process.cwd();
-    // console.log(`src directory: ${path.join(cwd, argv.src)}`);
-
-    // if (argv.clear) {
-    //   const d = path.join(cwd, dest);
-    //   const paths = await del([d + "/**"]);
-    //   // console.log(`clear dest dir: ${d}`);
-    // }
 
     const projName = JSON.parse(await readFileAsync(path.join(cwd, "package.json"))).name;
     const grdoc = {
@@ -308,15 +299,10 @@ async function main() {
     };
 
     const detectedFiles = await getTargetFilePathes(path.join(cwd, argv.src));
-    // console.log(`detected file:${detectedFiles.length}`);
 
 
     for (var i = 0; i < detectedFiles.length; i++) {
       const file = detectedFiles[i];
-      // console.log("parsing...:" + file);
-      const rel = path.relative(cwd, file);
-      // const replace = rel.replace(/[^\/]+\//, dest + "/");
-      // console.log(replace);
       const content = await readFileAsync(file);
       const doc = genDoc(file, content);
       for (let key in doc.nodes) {
@@ -328,9 +314,6 @@ async function main() {
       for (let key in doc.converters) {
         grdoc.converters[key] = doc.converters[key];
       }
-      // if (doc.nodes.length > 0 || doc.components.length > 0 || doc.converters.length > 0) {
-      //   writeFileAsync(replace, JSON.stringify(doc, null, "\t"));
-      // }
     }
     console.log(JSON.stringify(grdoc, null, "\t"));
   } catch (e) {
