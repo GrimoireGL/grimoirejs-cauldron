@@ -2,6 +2,14 @@
 
 var yargs = require("yargs");
 yargs.usage("<cmd> [args]")
+  .command('init', "init grimoire plugin project.", {
+    name: {
+      alias: "n",
+      describe: "The name of project."
+    }
+  }, function () {
+    require("../lib/scaffold/initProj");
+  })
   .command('scaffold', "Scaffold grimoirejs files", {
     name: {
       alias: "n",
