@@ -7,6 +7,10 @@ yargs.usage("<cmd> [args]")
       alias: "n",
       describe: "The name of project.",
       demand: true
+    },
+    ts: {
+      alias: "t",
+      describe: "use typescript."
     }
   }, function () {
     require("../lib/scaffold/initProj");
