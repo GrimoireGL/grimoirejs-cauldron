@@ -9,7 +9,8 @@ yargs.usage("<cmd> [args]")
     },
     type: {
       alias: "t",
-      describe: "The type of the file you want to generate"
+      describe: "The type of the file you want to generate",
+      choices: ['component', 'converter', 'node']
     },
     force: {
       describe: "Force override scaffolded file even if destination file was already existing."
@@ -78,7 +79,7 @@ yargs.usage("<cmd> [args]")
         describe: "debug mode"
       }
     },
-    function (argv) {
+    function () {
       require("../lib/buildUtil/generate-exposure");
     }).
 command("generate-reference", {
@@ -101,7 +102,7 @@ command("generate-reference", {
     debug: {
       describe: "debug mode"
     }
-  }, function (argv) {
+  }, function () {
     require("../lib/buildUtil/generate-reference");
   })
   .help().argv;

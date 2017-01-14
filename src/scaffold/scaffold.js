@@ -53,15 +53,6 @@ const scaffold = async() => {
       path: argv.name + "Converter"
     });
     await writeScaffoled(config.test.src + "/Converters/" + argv.name + "ConverterTest.js", test);
-  } else if (type === "constraint") {
-    if (!argv.name) {
-      console.log("please specify converter name you want to scaffold with -n option");
-      return;
-    }
-    const templated = await templateAsync(templateDir + "constraint.template", {
-      name: argv.name
-    });
-    await writeScaffoled(config.ts.src + "/Constraint/" + argv.name + "Constraint.ts", templated);
   } else {
     console.log("Please specify valid type to scaffold with -t option. 'component' or 'converter' are available.")
   }
