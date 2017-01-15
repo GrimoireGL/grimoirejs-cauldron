@@ -203,7 +203,7 @@ function genNodeDoc(src) {
     const c = nodeDecs[0];
     return parseNodeSource(getBraceContent(src, getIndex(src, c.comment.end + 1, "{")));
   } else {
-    const dec = findFirstLine(src, l => checkConverterDec(l));
+    const dec = findFirstLine(src, l => /export *default *\{/.test(l));
     if (dec) {
       return parseNodeSource(getBraceContent(src, getIndex(src, dec.line + 1, "{")));
     }

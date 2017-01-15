@@ -2,14 +2,30 @@
 
 var yargs = require("yargs");
 yargs.usage("<cmd> [args]")
+  .command('init', "init grimoire plugin project.", {
+    name: {
+      alias: "n",
+      describe: "The name of project.",
+      demand: true
+    },
+    ts: {
+      alias: "t",
+      describe: "use typescript."
+    }
+  }, function () {
+    require("../lib/scaffold/initProj");
+  })
   .command('scaffold', "Scaffold grimoirejs files", {
     name: {
       alias: "n",
-      describe: "The name of the file which you want generate"
+      describe: "The name of the file which you want generate",
+      demand: true
     },
     type: {
       alias: "t",
-      describe: "The type of the file you want to generate"
+      describe: "The type of the file you want to generate",
+      choices: ['component', 'converter', 'node'],
+      demand: true
     },
     force: {
       describe: "Force override scaffolded file even if destination file was already existing."
@@ -78,7 +94,7 @@ yargs.usage("<cmd> [args]")
         describe: "debug mode"
       }
     },
-    function (argv) {
+    function () {
       require("../lib/buildUtil/generate-exposure");
     }).
 command("generate-reference", {
@@ -101,7 +117,7 @@ command("generate-reference", {
     debug: {
       describe: "debug mode"
     }
-  }, function (argv) {
+  }, function () {
     require("../lib/buildUtil/generate-reference");
   })
   .help().argv;
