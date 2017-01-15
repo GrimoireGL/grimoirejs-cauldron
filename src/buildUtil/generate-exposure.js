@@ -69,7 +69,10 @@ async function generateIndex() {
             }
         }
         if (argv.debug) {
-            console.log(chalk.cyan(`Target files:\n ${pathMap}`));
+            console.log(chalk.cyan(`Target files:\n`));
+            for(let key in pathMap){
+              console.log(chalk.cyan(`${key} : "${pathMap[key]}"`));
+            }
         }
         // separate relative path by '/' or '\'
         const separated = {};

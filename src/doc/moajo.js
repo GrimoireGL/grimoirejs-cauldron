@@ -10,6 +10,7 @@ import {
   readFileAsync
 } from "../async-helper";
 
+import toMarkdown from "./to-markdown";
 function getBraceEndPos(source, openPos) {
   let depth = 0;
   for (let i = openPos; i < source.length; i++) {
@@ -316,7 +317,11 @@ async function main() {
         grdoc.converters[key] = doc.converters[key];
       }
     }
-    console.log(JSON.stringify(grdoc, null, "\t"));
+    if(argv.markdown){
+      console.log(console.log(await toMarkdown(grdoc)));
+    }else{
+      console.log(JSON.stringify(grdoc, null, "\t"));
+    }
   } catch (e) {
     console.error(e);
   }

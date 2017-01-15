@@ -2,4 +2,21 @@
   import {{key}} from "{{path}}";
 {{/each}}
 
-export default {{exportObject}};
+var __VERSION__ = "{{version}}";
+var __NAME__ = "{{name}}";
+
+import __MAIN__ from "{{mainPath}}"
+
+var __EXPOSE__ = {{exportObject}};
+
+let __BASE__ = __MAIN__();
+
+Object.assign(__EXPOSE__,{
+    __VERSION__:__VERSION__,
+    __NAME__:__NAME__
+});
+Object.assign(__BASE__|| {},__EXPOSE__);
+
+{{registerCode}}
+
+export default __BASE__;
