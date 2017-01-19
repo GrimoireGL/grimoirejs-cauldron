@@ -110,11 +110,7 @@ async function generateIndex() {
             version:pkgJson.version,
             name:pkgJson.name
         };
-        if (!argv.ts) {
-            await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/buildUtil/index-template.template"), templateArgs));
-        } else {
-            await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/buildUtil/ts-template.template"), templateArgs));
-        }
+          await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/buildUtil/index-template.template"), templateArgs));
     } catch (e) {
         console.log(e);
     }

@@ -5,7 +5,7 @@
 var __VERSION__ = "{{version}}";
 var __NAME__ = "{{name}}";
 
-import __MAIN__ from "{{mainPath}}"
+import __MAIN__ from "{{mainPath}}";
 
 var __EXPOSE__ = {{exportObject}};
 
