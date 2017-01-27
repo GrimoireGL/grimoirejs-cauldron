@@ -25,6 +25,9 @@ function reformat(jsonData){
     comp.short_description = getShortDescription(comp.description);
     for(let attr in comp.attributes){
       const attrV = comp.attributes[attr];
+      if(attrV.default === ""){
+        attrV.default = `(Empty string)`;
+      }
       attrV.short_description = getShortDescription(attrV.description);
     }
   }
