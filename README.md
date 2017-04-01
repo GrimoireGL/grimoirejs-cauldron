@@ -1,4 +1,6 @@
 # Cauldron
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/GrimoireGL/grimoirejs-cauldron.svg)](https://greenkeeper.io/)
 > A builder for grimoirejs related packages.
 
 ## What this package would do?
