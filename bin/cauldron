@@ -26,7 +26,7 @@ yargs.usage("<cmd> [args]")
     type: {
       alias: "t",
       describe: "The type of the file you want to generate",
-      choices: ['component', 'converter', 'node'],
+      choices: ['component', 'converter'],
       demand: true
     },
     force: {
