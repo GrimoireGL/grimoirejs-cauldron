@@ -30,6 +30,7 @@
     "js-comments": "^0.5.4",
     "progress": "^1.1.8",
     "prompt": "^1.0.0",
+    "simple-git": "^1.73.0",
     "uglify-js": "^2.7.3",
     "unzip": "^0.1.11",
     "watch": "^1.0.1",
