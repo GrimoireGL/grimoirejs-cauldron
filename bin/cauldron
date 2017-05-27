@@ -92,6 +92,10 @@ yargs.usage("<cmd> [args]")
         alias: "m",
         describe: "path of main file"
       },
+      core: {
+        type: "boolean",
+        describe: "set true only when building grimoirejs-core"
+      },
       debug: {
         describe: "debug mode"
       }

@@ -102,6 +102,8 @@ async function generateIndex() {
     }
     let templateArgs = {
       exportObject: objectCode,
+      importCore: argv.core ? "" : 'import gr from "grimoirejs";',
+      registerNamespace: argv.core ? "" : "gr.notifyRegisteringPlugin(__NAME__);",
       imports: imports,
       mainPath: "./" + path.relative(basePath, mainFileLocation).replace(/\.ts|\.js/g, ""),
       registerCode: projectSuffix ? `window["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;` : "window[\"GrimoireJS\"][\"__VERSION__\"]=__VERSION__;\n",

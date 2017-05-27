@@ -1,5 +1,6 @@
+{{importCore}}
 {{#each imports}}
-  import {{key}} from "{{path}}";
+import {{key}} from "{{path}}";
 {{/each}}
 
 let __VERSION__ = "{{version}}";
@@ -9,6 +10,7 @@ import __MAIN__ from "{{mainPath}}";
 
 let __EXPOSE__ = {{exportObject}};
 
+{{registerNamespace}}
 let __BASE__ = __MAIN__();
 
 Object.assign(__EXPOSE__, {

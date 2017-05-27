@@ -20,6 +20,9 @@ async function init() {
           console.error(e);
         }
         let package_json = await readFileAsync(path.join(cwd, "package.json"));
+        package_json = package_json.replace(/"name" *: *"[^"]*"/, `"name": "grimoire-${suffix}"`);
+        package_json = package_json.replace(/"description" *: *"[^"]*"/, `"description": ""`);
+        package_json = package_json.replace(/"version" *: *"[^"]*"/, `"version": "0.0.1"`);
         writeFileAsync(path.join(cwd, "package.json"), package_json.replace('"name": "grimoirejs-ts-boilerplate"', `"name": "grimoire-${suffix}"`));
 
       });
