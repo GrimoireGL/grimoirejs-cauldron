@@ -1,5 +1,6 @@
 import simple_git from "simple-git";
 import path from 'path';
+import fse from "fs-extra";
 const git = simple_git()
 import { getSuffix } from "../buildUtil/common";
 import { argv } from "yargs";
@@ -19,12 +20,18 @@ async function init() {
         if (e) {
           console.error(e);
         }
+
+        fse.removeSync(path.join(cwd, ".git"));
+
+        const path_README = path.join(cwd, "README.md");
+        writeFileAsync(path_README, `# grimoire-${suffix}\nplugin for Grimoire.js(https://grimoire.gl).\n`);
+
         let package_json = await readFileAsync(path.join(cwd, "package.json"));
-        package_json = package_json.replace(/"name" *: *"[^"]*"/, `"name": "grimoire-${suffix}"`);
+        package_json = package_json.replace(/"name" *: *"[^"]*"/, `"name": "grimoirejs-${suffix}"`);
         package_json = package_json.replace(/"description" *: *"[^"]*"/, `"description": ""`);
         package_json = package_json.replace(/"version" *: *"[^"]*"/, `"version": "0.0.1"`);
-        writeFileAsync(path.join(cwd, "package.json"), package_json.replace('"name": "grimoirejs-ts-boilerplate"', `"name": "grimoire-${suffix}"`));
-
+        await writeFileAsync(path.join(cwd, "package.json"), package_json.replace('"name": "grimoirejs-ts-boilerplate"', `"name": "grimoire-${suffix}"`));
+        git.init().add("./*").commit("Initial commit.");
       });
     } catch (e) {
       console.error(e);
