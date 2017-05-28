@@ -1,8 +1,8 @@
-## 概要
+# 概要
 
 {{{description}}}
 
-## インストール
+# インストール
 
 ```sh
 $ npm install {{name}} --save
@@ -12,9 +12,9 @@ $ npm install {{name}} --save
 
 ** [CDN - {{name}} - ](https://unpkg.com/{{name}}/register/{{short_name}}.js) **
 
-## 一覧
+# 一覧
 
-### ノード
+## ノード
 
 {{#if nodes}}
   |ノード名|説明|
@@ -26,7 +26,7 @@ $ npm install {{name}} --save
   **このプラグインによって登録されるノードはありません。**  
 {{/if}}
 
-### コンポーネント
+## コンポーネント
 
 {{#if components}}
   |コンポーネント名|説明|
@@ -38,7 +38,7 @@ $ npm install {{name}} --save
   **このプラグインによって登録されるコンポーネントはありません。**  
 {{/if}}
 
-### コンバーター
+## コンバーター
 
 {{#if converters}}
   |コンバーター名|説明|
@@ -51,11 +51,11 @@ $ npm install {{name}} --save
 {{/if}}
 
 {{#if nodes}}
-## ノード詳細
+# ノード詳細
 
 {{#each nodes}}
 
-### {{@key}}ノード
+## {{@key}}ノード
 
 {{#if this.super}}
 **継承元:&lt;{{this.super}}&gt;**
@@ -63,7 +63,7 @@ $ npm install {{name}} --save
 
 {{this.description}}
 
-#### コンポーネント
+### コンポーネント
 
 {{#each this.components}}
 * {{this}}
@@ -75,11 +75,11 @@ $ npm install {{name}} --save
 
 {{#if components}}
 
-## コンポーネント詳細
+# コンポーネント詳細
 
 {{#each components}}
 
-### {{@key}}コンポーネント
+## {{@key}}コンポーネント
 
 {{#if this.super}}
   **継承:{{this.super}}コンポーネント**  
@@ -88,7 +88,7 @@ $ npm install {{name}} --save
 {{this.description}}
 
 {{#if this.attributes}}
-#### 属性
+### 属性
 
 |名前|コンバーター|詳細|
 |:-:|:-:|:-:|
@@ -99,7 +99,7 @@ $ npm install {{name}} --save
 
 {{#each this.attributes}}
 
-##### {{@key}}属性
+#### {{@key}}属性
 
 **初期値** ・・・ `{{this.default}}`  
 **コンバーター** ・・・ `{{this.converter}}`
@@ -113,10 +113,10 @@ $ npm install {{name}} --save
 
 {{#if converters}}
 
-## コンバーター詳細
+# コンバーター詳細
 
 {{#each converters}}
-### {{@key}}コンバーター
+## {{@key}}コンバーター
 
 {{this.description}}
 
