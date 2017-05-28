@@ -6,11 +6,13 @@ yargs.usage("<cmd> [args]")
     name: {
       alias: "n",
       describe: "The name of project.",
-      demand: true
+      demand: true,
+      type: "string"
     },
-    ts: {
-      alias: "t",
-      describe: "use typescript."
+    js: {
+      alias: "j",
+      describe: "use javascript instead of typescript.",
+      type: "boolean"
     }
   }, function () {
     require("../lib/scaffold/initProj");
@@ -24,7 +26,7 @@ yargs.usage("<cmd> [args]")
     type: {
       alias: "t",
       describe: "The type of the file you want to generate",
-      choices: ['component', 'converter', 'node'],
+      choices: ['component', 'converter'],
       demand: true
     },
     force: {
@@ -96,8 +98,8 @@ yargs.usage("<cmd> [args]")
     },
     function () {
       require("../lib/buildUtil/generate-exposure");
-    }).
-command("generate-reference", {
+    })
+  .command("generate-reference", {
     src: {
       alias: "s",
       describe: "The folder containing ES6 codes to generate indices"
