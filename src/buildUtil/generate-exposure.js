@@ -107,7 +107,7 @@ async function generateIndex() {
       registerNamespace: argv.core ? "" : "gr.notifyRegisteringPlugin(__NAME__);",
       imports: imports,
       mainPath: "./" + path.relative(basePath, mainFileLocation).replace(/\.ts|\.js/g, ""),
-      registerCode: argv.core ? "(<any>window)[\"GrimoireJS\"][\"__VERSION__\"]=__VERSION__;\n" : `(<any>window)["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;`,
+      registerCode: argv.core ? "(window as any)[\"GrimoireJS\"][\"__VERSION__\"]=__VERSION__;\n" : `(window as any)["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;`,
       version: pkgJson.version,
       name: pkgJson.name
     };
