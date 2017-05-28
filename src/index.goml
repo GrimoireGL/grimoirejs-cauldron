@@ -1,0 +1,10 @@
+<goml>
+  <scene>
+    <camera position="0,0,5"/>
+    <mesh geometry="cube" color="red">
+    </mesh>
+  </scene>
+  <renderer>
+    <render-scene/>
+  </renderer>
+</goml>

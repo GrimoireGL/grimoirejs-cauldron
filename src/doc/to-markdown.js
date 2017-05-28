@@ -18,26 +18,34 @@ function getShortDescription(desc){
   return shortDesc;
 }
 
+function fixBreakLine(desc){
+  return desc.replace(/\n/g,"  \n");
+}
+
 function reformat(jsonData){
   jsonData.short_name = jsonData.name.replace("grimoirejs","grimoire");
   for(let key in jsonData.components){
     const comp = jsonData.components[key];
     comp.short_description = getShortDescription(comp.description);
+    comp.description = fixBreakLine(comp.description);
     for(let attr in comp.attributes){
       const attrV = comp.attributes[attr];
       if(attrV.default === ""){
         attrV.default = `(Empty string)`;
       }
       attrV.short_description = getShortDescription(attrV.description);
+      attrV.description = fixBreakLine(attrV.description);
     }
   }
   for(let key in jsonData.nodes){
     const node = jsonData.nodes[key];
     node.short_description = getShortDescription(node.description);
+    node.description = fixBreakLine(node.description);
   }
   for(let key in jsonData.converters){
     const conv = jsonData.converters[key];
     conv.short_description = getShortDescription(conv.description);
+    conv.description = fixBreakLine(conv.description);
   }
   return jsonData;
 }
