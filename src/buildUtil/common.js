@@ -4,6 +4,9 @@ export function jsSafeString(str) {
 }
 
 export function getSuffix(name) {
+  if (name === "grimoirejs") {
+    return name;
+  }
   const regex = /^[Gg]rimoire(?:js|JS)?-(.+)$/;
   let regexResult;
   if ((regexResult = regex.exec(name))) {
