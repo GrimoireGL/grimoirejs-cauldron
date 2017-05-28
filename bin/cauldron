@@ -5,7 +5,7 @@ yargs.usage("<cmd> [args]")
   .command('init', "init grimoire plugin project.", {
     name: {
       alias: "n",
-      describe: "The name of project.",
+      describe: "The name of project. MUST be start with 'grimoirejs-'.",
       demand: true,
       type: "string"
     },
@@ -92,6 +92,10 @@ yargs.usage("<cmd> [args]")
         alias: "m",
         describe: "path of main file"
       },
+      core: {
+        type: "boolean",
+        describe: "set true only when building grimoirejs-core"
+      },
       debug: {
         describe: "debug mode"
       }
@@ -122,4 +126,4 @@ yargs.usage("<cmd> [args]")
   }, function () {
     require("../lib/buildUtil/generate-reference");
   })
-  .help().argv;
+  .help("h").argv;

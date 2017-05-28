@@ -30,8 +30,8 @@ const scaffold = async() => {
   const templated = await templateAsync(templateDir + type + ".template", {
     name: argv.name
   });
-  const upperType = type.substr(0, 1).toUpperCase() + type.substring(1) + "s";
-  await writeScaffoled(path.join(projroot, `src/${upperType}/` + argv.name + "Component.ts"), templated);
+  const upperType = type.substr(0, 1).toUpperCase() + type.substring(1);
+  await writeScaffoled(path.join(projroot, `src/${upperType}s/` + argv.name + `${upperType}.ts`), templated);
   if (type === "converter") {
     const test = await templateAsync(templateDir + "converter_test.template", {
       key: argv.name + "Converter",

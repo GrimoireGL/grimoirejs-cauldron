@@ -2,7 +2,8 @@ import {
   globAsync,
   readFileAsync,
   templateAsync,
-  writeFileAsync
+  writeFileAsync,
+  existsAsync
 } from "../async-helper";
 import { argv } from "yargs";
 import path from "path";
@@ -102,13 +103,19 @@ async function generateIndex() {
     }
     let templateArgs = {
       exportObject: objectCode,
+      importCore: argv.core ? "" : 'import gr from "grimoirejs";',
+      registerNamespace: argv.core ? "" : "gr.notifyRegisteringPlugin(__NAME__);",
       imports: imports,
       mainPath: "./" + path.relative(basePath, mainFileLocation).replace(/\.ts|\.js/g, ""),
-      registerCode: projectSuffix ? `window["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;` : "window[\"GrimoireJS\"][\"__VERSION__\"]=__VERSION__;\n",
+      registerCode: argv.core ? "(<any>window)[\"GrimoireJS\"][\"__VERSION__\"]=__VERSION__;\n" : `(<any>window)["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;`,
       version: pkgJson.version,
       name: pkgJson.name
     };
-    await writeFileAsync(path.join(cwd, argv.dest), await templateAsync(path.normalize(__dirname + "/../../src/buildUtil/index-template.template"), templateArgs));
+    let index_ts_content = await templateAsync(path.normalize(__dirname + "/../../src/buildUtil/index-template.template"), templateArgs);
+    let dest_path = path.join(cwd, argv.dest);
+    if (!await existsAsync(dest_path) || index_ts_content !== await readFileAsync(dest_path)) {
+      await writeFileAsync(dest_path, index_ts_content);
+    }
   } catch (e) {
     console.log(e);
   }
