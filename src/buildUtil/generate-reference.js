@@ -16,7 +16,7 @@ function genRefCode(separatedPath, libSuffix) {
   let refCode = `	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});`;
-  if (libSuffix !== "grimoirejs") {
+  if (!argv.core) {
     refCode += `exports.default=window.GrimoireJS.lib.${libSuffix}`;
   } else {
     refCode += `exports.default=window.GrimoireJS`;
