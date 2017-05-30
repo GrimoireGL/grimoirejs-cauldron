@@ -93,14 +93,6 @@ async function generateIndex() {
         key: jsSafeString(separated[keyPath].reduce((p, c) => p + c))
       });
     }
-    let index = 0;
-    for (let pathes of interfaces) {
-      index++;
-      imports.push({
-        path: "./" + pathes.replace(/\.ts/g, ""),
-        key: "__INTERFACE__" + index
-      });
-    }
     let templateArgs = {
       exportObject: objectCode,
       importCore: argv.core ? "" : 'import gr from "grimoirejs";',
