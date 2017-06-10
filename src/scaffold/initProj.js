@@ -6,8 +6,8 @@ import { getSuffix } from "../buildUtil/common";
 import { argv } from "yargs";
 import { readFileAsync, writeFileAsync } from "../async-helper";
 
-const ts_boilerplate = "git@github.com:GrimoireGL/ts-boilerplate.git"
-const js_boilerplate = "git@github.com:GrimoireGL/js-boilerplate.git"
+const ts_boilerplate = "https://github.com/GrimoireGL/ts-boilerplate.git"
+const js_boilerplate = "https://github.com/GrimoireGL/js-boilerplate.git"
 
 async function init() {
   const suffix = getSuffix(argv.name);
