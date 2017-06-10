@@ -1,4 +1,3 @@
-{{importCore}}
 {{#each imports}}
 import {{key}} from "{{path}}";
 {{/each}}
@@ -10,6 +9,7 @@ import __MAIN__ from "{{mainPath}}";
 
 let __EXPOSE__ = {{exportObject}};
 
+{{importCore}}
 {{registerNamespace}}
 let __BASE__ = __MAIN__();
 
