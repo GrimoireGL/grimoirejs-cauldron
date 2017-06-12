@@ -33,6 +33,10 @@ These tasks can take some of arguments. You can see all of these documents by us
 
 Generate project template from ts-boilerplate. (https://github.com/GrimoireGL/ts-boilerplate)
 
+```sh
+$ cauldron init -n <NAME OF YOUR PROJECT>
+```
+
 ### cauldron scaffold
 
 Generate the files used commonly in grimoire.js.

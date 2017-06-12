@@ -1,7 +1,7 @@
 {
   "name": "grimoirejs-cauldron",
   "license": "MIT",
-  "version": "3.1.5-beta",
+  "version": "0.0.0-develop",
   "description": "The build environment for grimoirejs.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,7 +22,7 @@
     "lib",
     "src"
   ],
-  "author": "",
+  "author": "GrimoireGL",
   "dependencies": {
     "babel-runtime": "^6.23.0",
     "chalk": "^1.1.3",
