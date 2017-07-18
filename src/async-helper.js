@@ -55,6 +55,13 @@ export async function templateAsync(filePath, args) {
   })(args);
 }
 
+export async function templateCompileAsync(filePath){
+  const template = await readFileAsync(filePath);
+  return handleBars.compile(template, {
+    noEscape: true
+  });
+}
+
 export function copyDirAsync(src, dest, clobber = false, filter) {
   if (!filter) {
     filter = () => {

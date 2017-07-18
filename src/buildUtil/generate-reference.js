@@ -2,7 +2,8 @@ import path from "path";
 import {
   readFileAsync,
   globAsync,
-  writeFileAsync
+  writeFileAsync,
+  templateCompileAsync
 } from "../async-helper";
 import {
   argv
@@ -12,19 +13,16 @@ import {
 } from "./common";
 import chalk from "chalk";
 
+let refGen;
 function genRefCode(separatedPath, libSuffix) {
-  let refCode = `	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});`;
-  if (!argv.core) {
-    refCode += `exports.default=window.GrimoireJS.lib.${libSuffix}`;
-  } else {
-    refCode += `exports.default=window.GrimoireJS`;
-  }
+  let sepPath = "";
   for (let i = 0; i < separatedPath.length; i++) {
-    refCode += `.${separatedPath[i]}`;
+    sepPath += `.${separatedPath[i]}`;
   }
-  return refCode + ";";
+  return refGen({
+    libSuffix:!argv.core?libSuffix:undefined,
+    separatedPath:sepPath
+  });
 }
 
 function genDtsCode(isIndex) {
@@ -43,6 +41,7 @@ export default __PACKAGE_DECL__;`;
 
 async function generateReference() {
   try {
+    refGen = await templateCompileAsync(path.normalize(__dirname + "/../../src/buildUtil/ref-template.template"));
     const cwd = process.cwd(); // current working directory
     const pkgJson = JSON.parse(await readFileAsync(path.join(cwd, "package.json")));
     const projectSuffix = getSuffix(pkgJson.name);

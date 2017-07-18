@@ -1,7 +1,7 @@
 import {
   globAsync,
   readFileAsync,
-  templateAsync,
+  templateCompileAsync,
   writeFileAsync,
   existsAsync
 } from "../async-helper";
@@ -9,6 +9,8 @@ import { argv } from "yargs";
 import path from "path";
 import chalk from "chalk";
 import { jsSafeString, getSuffix } from "./common";
+
+let indexGen;
 
 function generateStructureRecursively(obj, sepDirs, basePath) {
   if (sepDirs.length < 2) {
@@ -40,6 +42,7 @@ function asJSIndex(jsonStr, sepDirs) {
 
 async function generateIndex() {
   try {
+    indexGen = await templateCompileAsync(path.normalize(__dirname + "/../../src/buildUtil/index-template.template"));
     const cwd = process.cwd();
     const pkgJson = JSON.parse(await readFileAsync(path.join(cwd, "package.json")));
     const projectSuffix = getSuffix(pkgJson.name);
@@ -103,7 +106,7 @@ async function generateIndex() {
       version: pkgJson.version,
       name: pkgJson.name
     };
-    let index_ts_content = await templateAsync(path.normalize(__dirname + "/../../src/buildUtil/index-template.template"), templateArgs);
+    let index_ts_content = indexGen(templateArgs);
     let dest_path = path.join(cwd, argv.dest);
     if (!await existsAsync(dest_path) || index_ts_content !== await readFileAsync(dest_path)) {
       await writeFileAsync(dest_path, index_ts_content);
