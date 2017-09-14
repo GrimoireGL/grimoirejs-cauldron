@@ -23,5 +23,6 @@ dependencies:
 test:
   override:
     - npm run build
+    - sh ./test/test.sh
   post:
     - sh release.sh
