@@ -1,6 +1,2 @@
 Object.defineProperty(exports,"__esModule",{value: true});
-{{#if libSuffix}}
-exports.default=window.GrimoireJS&&window.GrimoireJS.lib.{{libSuffix}}?window.GrimoireJS.lib.{{libSuffix}}{{separatedPath}}:undefined;
-{{else}}
-exports.default=window.GrimoireJS{{separatedPath}};
-{{/if}}
+exports.default=window.GrimoireJS.import("{{libSuffix}}{{separatedPath}}");

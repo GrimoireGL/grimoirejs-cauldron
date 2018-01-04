@@ -17,11 +17,11 @@ let refGen;
 function genRefCode(separatedPath, libSuffix) {
   let sepPath = "";
   for (let i = 0; i < separatedPath.length; i++) {
-    sepPath += `.${separatedPath[i]}`;
+    sepPath += `/${separatedPath[i]}`;
   }
   return refGen({
-    libSuffix:!argv.core?libSuffix:undefined,
-    separatedPath:sepPath
+    libSuffix: (!argv.core ? libSuffix : "grimoirejs") + "/ref",
+    separatedPath: sepPath
   });
 }
 
