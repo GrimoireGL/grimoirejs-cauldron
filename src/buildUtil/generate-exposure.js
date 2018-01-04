@@ -65,7 +65,7 @@ async function generateIndex() {
     indexGen = await templateCompileAsync(path.normalize(__dirname + "/../../src/buildUtil/index-template.template"));
     const cwd = process.cwd();
     const pkgJson = JSON.parse(await readFileAsync(path.join(cwd, "package.json")));
-    const projectSuffix = getSuffix(pkgJson.name);
+    const projectSuffix = argv.core ? "core" : getSuffix(pkgJson.name);
     const destFileLocation = path.resolve(path.join(cwd, argv.dest));
     const mainFileLocation = path.resolve(path.join(cwd, argv.main));
     const metaInfoLocation = path.resolve(path.join(path.dirname(path.join(cwd, argv.dest)), "metaInfo.ts"));
@@ -123,7 +123,7 @@ async function generateIndex() {
       registerNamespace: argv.core ? "" : "gr.notifyRegisteringPlugin(__META__.__NAMESPACE__);",
       imports: imports,
       mainPath: "./" + path.relative(basePath, mainFileLocation).replace(/\.ts|\.js/g, ""),
-      registerCode: argv.core ? "(window as any)[\"GrimoireJS\"][\"__VERSION__\"]=__META__.__VERSION__;\n" : `(window as any)["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;`,
+      registerCode: `(window as any)["GrimoireJS"].lib.${projectSuffix} = __EXPOSE__;`,
       version: pkgJson.version,
       name: pkgJson.name
     };

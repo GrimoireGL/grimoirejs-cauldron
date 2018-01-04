@@ -5,16 +5,16 @@
 import * as __META__ from "./metaInfo";
 
 {{#each imports}}
-import {{key}} from "{{path}}";
+import * as {{key}} from "{{path}}";
 {{/each}}
 
 import __MAIN__ from "{{mainPath}}";
 
-let __EXPOSE__ = {{exportObject}};
+const __EXPOSE__ = {{exportObject}};
 
 {{importCore}}
 {{registerNamespace}}
-let __BASE__ = __MAIN__();
+const __BASE__ = __MAIN__();
 
 Object.assign(__EXPOSE__, {
   __VERSION__: __META__.__VERSION__,
