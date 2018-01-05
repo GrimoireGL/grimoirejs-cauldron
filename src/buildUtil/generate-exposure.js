@@ -75,7 +75,6 @@ async function generateIndex() {
       console.log(chalk.cyan(`CWD:${cwd} Project Suffix:${projectSuffix}\n destination:${destFileLocation}\n mainFile:${mainFileLocation}\n basePath:${basePath}\n\n DetectedFiles:\n${detectedFiles}`));
     }
     const pathMap = {};
-    const interfaces = [];
     // listup files containing `export default`
     for (let i = 0; i < detectedFiles.length; i++) {
       const relative = path.relative(basePath, detectedFiles[i]);
@@ -84,12 +83,7 @@ async function generateIndex() {
         continue;
       }
       const content = await readFileAsync(detectedFiles[i]);
-      if (content.indexOf("interface ") >= 0 && content.indexOf("class ") < 0) { // to ignore interfaces
-        interfaces.push(relative);
-        continue;
-      } else {
-        pathMap[relative] = path.parse(relative);
-      }
+      pathMap[relative] = path.parse(relative);
     }
     if (argv.debug) {
       console.log(chalk.cyan(`Target files:\n`));
