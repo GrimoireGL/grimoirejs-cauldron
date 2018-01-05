@@ -63,10 +63,10 @@ async function generateReference() {
       }
       for (let i = 0; i < filteredPath.length; i++) {
         if (filteredPath[i] === destFileRelativeWithoutExt) {
-          await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".js"), genRefCode([], projectSuffix));
+          await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".js"), genRefCode([], pkgJson.name));
           continue;
         }
-        await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".js"), genRefCode(filteredPath[i].split(path.sep), projectSuffix));
+        await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".js"), genRefCode(filteredPath[i].split(path.sep), pkgJson.name));
       }
     } else {
       const jsFiles = path.join(cwd, argv.src, "**/*.js");
@@ -80,11 +80,11 @@ async function generateReference() {
       }
       for (let i = 0; i < filteredPath.length; i++) {
         if (filteredPath[i] === destFileRelativeWithoutExt) {
-          await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".js"), genRefCode([], projectSuffix));
+          await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".js"), genRefCode([], pkgJson.name));
           await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".d.ts"), genDtsCode(true));
           continue;
         }
-        await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".js"), genRefCode(filteredPath[i].split(path.sep), projectSuffix));
+        await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".js"), genRefCode(filteredPath[i].split(path.sep), pkgJson.name));
         await writeFileAsync(path.join(cwd, argv.dts, filteredPath[i] + ".d.ts"), genDtsCode(false));
       }
     }

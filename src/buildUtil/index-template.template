@@ -18,7 +18,8 @@ const __BASE__ = __MAIN__();
 
 Object.assign(__EXPOSE__, {
   __VERSION__: __META__.__VERSION__,
-  __NAME__: __META__.__NAME__
+  __NAME__: __META__.__NAME__,
+  __NAMESPACE__: __META__.__NAMESPACE__
 });
 Object.assign(__BASE__ || {}, __EXPOSE__);
 
