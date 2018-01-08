@@ -105,3 +105,4 @@ lib-es6
 lib-es5
 lib-ts
 lib
+package-lock.json
