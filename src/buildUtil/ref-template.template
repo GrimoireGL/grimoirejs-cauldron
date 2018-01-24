@@ -1,2 +1,2 @@
+exports=window.GrimoireJS?window.GrimoireJS.import("{{libSuffix}}{{separatedPath}}"):undefined;
 Object.defineProperty(exports,"__esModule",{value: true});
-exports.default=window.GrimoireJS?window.GrimoireJS.import("{{libSuffix}}{{separatedPath}}"):undefined;
