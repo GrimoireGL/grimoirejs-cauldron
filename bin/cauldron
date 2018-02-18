@@ -75,35 +75,35 @@ yargs.usage("<cmd> [args]")
   }, function () {
     require("../lib/doc/to-markdown");
   })
-  .command("generate-exposure", {
-      src: {
-        alias: "s",
-        describe: "The folder containing ES6 codes to generate indices"
-      },
-      dest: {
-        alias: "d",
-        describe: "Destination of the file"
-      },
-      ts: {
-        alias: "t",
-        describe: "This project using typescript or not"
-      },
-      main: {
-        alias: "m",
-        describe: "path of main file"
-      },
-      core: {
-        type: "boolean",
-        describe: "set true only when building grimoirejs-core"
-      },
-      debug: {
-        describe: "debug mode"
-      }
+  .command("generate-exposure", "generate index.ts and metaInfo.ts", {
+    src: {
+      alias: "s",
+      describe: "The folder containing ES6 codes to generate indices"
     },
+    dest: {
+      alias: "d",
+      describe: "Destination of the file"
+    },
+    ts: {
+      alias: "t",
+      describe: "This project using typescript or not"
+    },
+    main: {
+      alias: "m",
+      describe: "path of main file"
+    },
+    core: {
+      type: "boolean",
+      describe: "set true only when building grimoirejs-core"
+    },
+    debug: {
+      describe: "debug mode"
+    }
+  },
     function () {
       require("../lib/buildUtil/generate-exposure");
     })
-  .command("generate-reference", {
+  .command("generate-reference", "generate ref directory", {
     src: {
       alias: "s",
       describe: "The folder containing ES6 codes to generate indices"
