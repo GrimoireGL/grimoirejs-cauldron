@@ -117,7 +117,7 @@ yargs.usage("<cmd> [args]")
       describe: "path of main file"
     },
     dts: {
-      alias: "d",
+      alias: "t",
       describe: "path of dts files"
     },
     debug: {
