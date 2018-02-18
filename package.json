@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "watch 'npm run build' ./src",
     "build": "babel ./src --out-dir ./lib --presets es2015,stage-2 --plugins transform-runtime",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "keywords": [
